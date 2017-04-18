@@ -1,5 +1,6 @@
 var AuthenticationController = require('./controllers/authentication'),
     TodoController = require('./controllers/ilanlar'),
+    AktiviteController = require('./controllers/aktiviteler'),
     UsersController = require('./controllers/users'),
     express = require('express'),
     passportService = require('../config/passport'),
@@ -14,14 +15,7 @@ module.exports = function(app){
         authRoutes = express.Router(),
         todoRoutes = express.Router();
         userRoutes = express.Router();
-
-        // app.post('/login', function(req, res, next ){
-        //     passport.authenticate('local', function(err, user, info) {
-        //       if (err) { return next(err) }
-        //       if (!user) { return res.json( { message: info.message }) }
-        //       res.json(user);
-        //     })(req, res, next);
-        // });
+        aktiviteRoutes = express.Router();
 
     // Auth Routes
     apiRoutes.use('/auth', authRoutes);
@@ -32,15 +26,12 @@ module.exports = function(app){
     authRoutes.get('/protected', requireAuth, function(req, res){
         res.send({ content: 'Success'});
     });
-
-
     apiRoutes.use('/users', userRoutes);
 
     userRoutes.get('/', requireAuth, UsersController.getUsers);
     userRoutes.get('/:email', requireAuth, UsersController.getUser);
     userRoutes.delete('/:user_id', requireAuth, AuthenticationController.roleAuthorization(['creator']), UsersController.deleteUser);
     userRoutes.put('/:user_id', requireAuth, AuthenticationController.roleAuthorization(['creator']), UsersController.updateUser);
-
 
     // Todo Routes
     apiRoutes.use('/ilanlar', todoRoutes);
@@ -50,6 +41,17 @@ module.exports = function(app){
     // todoRoutes.post('/', requireAuth, /* AuthenticationController.roleAuthorization(['creator', 'editor', 'reader']), */ TodoController.createKayit);
     // todoRoutes.delete('/:kayit_id', requireAuth,TodoController.deleteKayit);
     // todoRoutes.put('/:kayit_id', requireAuth TodoController.updateKayit);
+    apiRoutes.use('/aktiviteler', aktiviteRoutes);
+
+    aktiviteRoutes.get('/basvuru', AktiviteController.getBasvurular);
+    aktiviteRoutes.get('/basvuru/:basvuru_id', AktiviteController.getBasvuru);
+    aktiviteRoutes.post('/basvuru', AktiviteController.createBasvuru);
+    aktiviteRoutes.delete('/basvuru/:kayit_id', AktiviteController.deleteBasvuru);
+
+    aktiviteRoutes.get('/kaydedilen', AktiviteController.getKaydedilenler);
+    aktiviteRoutes.get('/kaydedilen/:kaydedilen_id', AktiviteController.getKaydedilen);
+    aktiviteRoutes.post('/kaydedilen', AktiviteController.createKaydedilen);
+    aktiviteRoutes.delete('/kaydedilen/:kaydedilen_id', AktiviteController.deleteKaydedilen);
 
     // Set up routes
     app.use('/api', apiRoutes);
