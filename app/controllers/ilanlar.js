@@ -31,8 +31,8 @@ exports.getIlanlar = function(req, res, next){
 
   var firma = new RegExp(kayit.firma, "i")
   var order = JSON.parse(req.query.orderBy);
-  // console.log(query+'query');
-  console.log(order+'order');
+  console.log(req.query.orderBy);
+  console.log(JSON.stringify(order)+'order');
   console.log(firma+'firma');
   console.log(JSON.stringify(egitim)+'egitim');
   console.log(JSON.stringify(tecrube)+'tecrube');
@@ -47,11 +47,11 @@ exports.getIlanlar = function(req, res, next){
 }
 ,function(err, kayitlar) {
 
-        if (err){
-            res.send(err);
+        if (err)  {res.send(err);
         }
 
         res.json(kayitlar);
+
     }).sort(order);
 }
 

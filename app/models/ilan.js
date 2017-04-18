@@ -65,7 +65,7 @@ var IlanSchema = new mongoose.Schema({
     }
 
 }, {
-    timestamps: { createdAt: 'olusurmaTarih', updatedAt: 'guncellemeTarih' } ,
+    timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,
     collection: 'ilan'
   });
 
