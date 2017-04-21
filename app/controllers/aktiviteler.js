@@ -4,19 +4,20 @@ var Kaydedilen = require('../models/kaydedilen');
 exports.getBasvurular = function(req, res, next){
   // var st = new RegExp(req.query.term, "i")
     Basvuru.find(
-      {
+      { ozgecmis: req.query.ozgecmis
     // $and : [ query, {owner: owner},
     //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
     // ]
-}
-,function(err, kayitlar) {
+}).populate({ path: 'basvuru', options: { sort: { guncellemeTarih: -1 }}})
+.exec(function(err, kayitlar) {
 
         if (err){
             res.send(err);
         }
 
         res.json(kayitlar);
-    }).sort({guncellemeTarih: -1});
+    });
+    // .sort({guncellemeTarih: -1});
 }
 
   exports.getBasvuru = function(req, res, next){
@@ -60,7 +61,7 @@ exports.deleteBasvuru = function(req, res, next){
 exports.getKaydedilenler = function(req, res, next){
   // var st = new RegExp(req.query.term, "i")
     Kaydedilen.find(
-      {
+      {ozgecmis: req.query.ozgecmis
     // $and : [ query, {owner: owner},
     //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
     // ]
