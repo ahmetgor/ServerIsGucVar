@@ -48,10 +48,13 @@ module.exports = function(app){
     aktiviteRoutes.post('/basvuru', AktiviteController.createBasvuru);
     aktiviteRoutes.delete('/basvuru/:kayit_id', AktiviteController.deleteBasvuru);
 
-    aktiviteRoutes.get('/kaydedilen', AktiviteController.getKaydedilenler);
+    // aktiviteRoutes.get('/kaydedilen', AktiviteController.getKaydedilenler);
     aktiviteRoutes.get('/kaydedilen/:kaydedilen_id', AktiviteController.getKaydedilen);
     aktiviteRoutes.post('/kaydedilen', AktiviteController.createKaydedilen);
     aktiviteRoutes.delete('/kaydedilen/:kaydedilen_id', AktiviteController.deleteKaydedilen);
+
+    aktiviteRoutes.get('/basvurulist', AktiviteController.getBasvurularList);
+    aktiviteRoutes.get('/kaydedilenlist', AktiviteController.getKaydedilenlerList);
 
     // Set up routes
     app.use('/api', apiRoutes);
