@@ -7,7 +7,7 @@ var KaydedilenSchema = new mongoose.Schema({
     ref: 'Ozgecmis'
   },
 
-    kaydedilen: {
+  kaydedilen: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Ilan'
     }
@@ -17,4 +17,6 @@ var KaydedilenSchema = new mongoose.Schema({
     collection: 'kaydedilen'
   });
 
-  module.exports = mongoose.model('Kaydedilen', KaydedilenSchema);
+KaydedilenSchema.index({ ozgecmis: 1, kaydedilen: 1}, { unique: true });
+
+module.exports = mongoose.model('Kaydedilen', KaydedilenSchema);

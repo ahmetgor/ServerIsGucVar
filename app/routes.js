@@ -2,6 +2,7 @@ var AuthenticationController = require('./controllers/authentication'),
     TodoController = require('./controllers/ilanlar'),
     AktiviteController = require('./controllers/aktiviteler'),
     UsersController = require('./controllers/users'),
+    OzgecmisController = require('./controllers/ozgecmisler'),
     express = require('express'),
     passportService = require('../config/passport'),
     passport = require('passport');
@@ -16,7 +17,7 @@ module.exports = function(app){
         todoRoutes = express.Router();
         userRoutes = express.Router();
         aktiviteRoutes = express.Router();
-
+        ozgecmisRoutes = express.Router();
     // Auth Routes
     apiRoutes.use('/auth', authRoutes);
 
@@ -35,23 +36,30 @@ module.exports = function(app){
 
     // Todo Routes
     apiRoutes.use('/ilanlar', todoRoutes);
-
     todoRoutes.get('/', TodoController.getIlanlar);
     todoRoutes.get('/:kayit_id', TodoController.getIlan);
     // todoRoutes.post('/', requireAuth, /* AuthenticationController.roleAuthorization(['creator', 'editor', 'reader']), */ TodoController.createKayit);
     // todoRoutes.delete('/:kayit_id', requireAuth,TodoController.deleteKayit);
     // todoRoutes.put('/:kayit_id', requireAuth TodoController.updateKayit);
+
+    apiRoutes.use('/ozgecmis', ozgecmisRoutes);
+    // aktiviteRoutes.get('/ozgecmis', AktiviteController.getBasvurular);
+    ozgecmisRoutes.get('/:ozgecmis_id', OzgecmisController.getOzgecmis);
+    ozgecmisRoutes.post('/', OzgecmisController.createBasvuru);
+    ozgecmisRoutes.delete('/', OzgecmisController.deleteBasvuru);
+
     apiRoutes.use('/aktiviteler', aktiviteRoutes);
 
     aktiviteRoutes.get('/basvuru', AktiviteController.getBasvurular);
     aktiviteRoutes.get('/basvuru/:basvuru_id', AktiviteController.getBasvuru);
     aktiviteRoutes.post('/basvuru', AktiviteController.createBasvuru);
-    aktiviteRoutes.delete('/basvuru/:kayit_id', AktiviteController.deleteBasvuru);
+    aktiviteRoutes.delete('/basvuru', AktiviteController.deleteBasvuru);
 
     // aktiviteRoutes.get('/kaydedilen', AktiviteController.getKaydedilenler);
+    aktiviteRoutes.get('/kaydedilen', AktiviteController.getKaydedilenler);
     aktiviteRoutes.get('/kaydedilen/:kaydedilen_id', AktiviteController.getKaydedilen);
     aktiviteRoutes.post('/kaydedilen', AktiviteController.createKaydedilen);
-    aktiviteRoutes.delete('/kaydedilen/:kaydedilen_id', AktiviteController.deleteKaydedilen);
+    aktiviteRoutes.delete('/kaydedilen', AktiviteController.deleteKaydedilen);
 
     aktiviteRoutes.get('/basvurulist', AktiviteController.getBasvurularList);
     aktiviteRoutes.get('/kaydedilenlist', AktiviteController.getKaydedilenlerList);

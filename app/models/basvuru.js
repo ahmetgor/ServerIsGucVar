@@ -7,7 +7,7 @@ var BasvuruSchema = new mongoose.Schema({
     ref: 'Ozgecmis'
   },
 
-    basvuru: {
+  basvuru: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Ilan'
     }
@@ -16,5 +16,7 @@ var BasvuruSchema = new mongoose.Schema({
     timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,
     collection: 'basvuru'
   });
+
+BasvuruSchema.index({ ozgecmis: 1, basvuru: 1}, { unique: true });
 
 module.exports = mongoose.model('Basvuru', BasvuruSchema);

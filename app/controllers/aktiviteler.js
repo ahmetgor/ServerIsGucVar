@@ -14,7 +14,24 @@ exports.getBasvurular = function(req, res, next){
         if (err){
             res.send(err);
         }
+        res.json(kayitlar);
+    });
+    // .sort({guncellemeTarih: -1});
+}
 
+exports.getKaydedilenler = function(req, res, next){
+  // var st = new RegExp(req.query.term, "i")
+    Kaydedilen.find(
+      { ozgecmis: req.query.ozgecmis
+    // $and : [ query, {owner: owner},
+    //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
+    // ]
+}).populate({ path: 'kaydedilen', options: { sort: { guncellemeTarih: -1 }}})
+.exec(function(err, kayitlar) {
+
+        if (err){
+            res.send(err);
+        }
         res.json(kayitlar);
     });
     // .sort({guncellemeTarih: -1});
@@ -32,7 +49,6 @@ exports.getBasvurularList = function(req, res, next){
         if (err){
             res.send(err);
         }
-
         res.json(kayitlar);
     });
     // .sort({guncellemeTarih: -1});
@@ -50,7 +66,6 @@ exports.getKaydedilenlerList = function(req, res, next){
         if (err){
             res.send(err);
         }
-
         res.json(kayitlar);
     });
     // .sort({guncellemeTarih: -1});
@@ -63,12 +78,12 @@ exports.getKaydedilenlerList = function(req, res, next){
             if (err){
                 res.send(err);
             }
-
             res.json(kayit);
         });
 }
 
 exports.createBasvuru = function(req, res, next){
+  console.log(JSON.stringify(req.body)+'create');
 
     Basvuru.create(req.body, function(err, kayit) {
 
@@ -81,9 +96,10 @@ exports.createBasvuru = function(req, res, next){
 }
 
 exports.deleteBasvuru = function(req, res, next){
-
+  console.log(JSON.stringify(req.query.basvuruid)+'delete');
     Basvuru.remove({
-        _id : req.params.basvuru_id
+        basvuru : req.query.basvuruid,
+        ozgecmis : req.query.ozgecmis
     }, function(err, kayit) {
 
       if (err){
@@ -125,6 +141,7 @@ exports.deleteBasvuru = function(req, res, next){
 }
 
 exports.createKaydedilen = function(req, res, next){
+  console.log(JSON.stringify(req.body)+'create');
 
     Kaydedilen.create(req.body, function(err, kayit) {
 
@@ -137,9 +154,11 @@ exports.createKaydedilen = function(req, res, next){
 }
 
 exports.deleteKaydedilen = function(req, res, next){
+  console.log(JSON.stringify(req.query.kaydedilenid)+'delete');
 
     Kaydedilen.remove({
-        _id : req.params.kaydedilen_id
+        kaydedilen : req.query.kaydedilenid,
+        ozgecmis : req.query.ozgecmis
     }, function(err, kayit) {
 
       if (err){

@@ -2,13 +2,9 @@ var Ilan = require('../models/ilan');
 
 exports.getIlanlar = function(req, res, next){
 
-  // console.log(JSON.stringify(req.user.firma)+'req query');
   var st = new RegExp(req.query.term, "i")
-  // var tecrube = (req.query.kayit.tecrube===undefined) ? ["Orta Tecrübeli (Midlevel)","Az Tecrübeli (Junior)"] : req.query.kayit.tecrube;
-  // var egitim = (req.query.kayit.egitim===undefined) ? ["Lise", "Lisans"] : req.query.kayit.egitim;
   var kayit = JSON.parse(req.query.kayit);
-  // console.log(JSON.stringify(kayit)+'kayit');
-  // console.log(JSON.stringify(kayit.tecrube)+'KAYİT TEC');
+
   if (kayit.tecrube!=undefined && kayit.tecrube.length > 0) {
     // var tecrube = JSON.parse("{tecrube:{ $in:"+JSON.stringify(kayit.tecrube)+" }}");
     var tecrube = {tecrube:{ $in :kayit.tecrube }};
@@ -31,14 +27,13 @@ exports.getIlanlar = function(req, res, next){
 
   var firma = new RegExp(kayit.firma, "i")
   var order = JSON.parse(req.query.orderBy);
-  console.log(req.query.orderBy);
-  console.log(JSON.stringify(order)+'order');
-  console.log(firma+'firma');
-  console.log(JSON.stringify(egitim)+'egitim');
-  console.log(JSON.stringify(tecrube)+'tecrube');
-  console.log(kayit.egitim+'egitim query');
-  console.log(st+'st');
-
+  // console.log(req.query.orderBy);
+  // console.log(JSON.stringify(order)+'order');
+  // console.log(firma+'firma');
+  // console.log(JSON.stringify(egitim)+'egitim');
+  // console.log(JSON.stringify(tecrube)+'tecrube');
+  // console.log(kayit.egitim+'egitim query');
+  // console.log(st+'st');
     Ilan.find(
       {
     $and : [ {firma: firma}, tecrube, egitim,
@@ -49,7 +44,6 @@ exports.getIlanlar = function(req, res, next){
 
         if (err)  {res.send(err);
         }
-
         res.json(kayitlar);
 
     }).sort(order);
@@ -62,7 +56,6 @@ exports.getIlanlar = function(req, res, next){
           if (err){
               res.send(err);
           }
-
           res.json(kayit);
       });
 
