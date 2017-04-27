@@ -165,7 +165,7 @@ var OzgecmisSchema = new mongoose.Schema({
 
 }, {
     timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,
-    collection: 'ilan'
+    collection: 'ozgecmis'
   });
 
 module.exports = mongoose.model('Ozgecmis', OzgecmisSchema);

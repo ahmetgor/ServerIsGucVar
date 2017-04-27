@@ -7,6 +7,7 @@ exports.getOzgecmis = function(req, res, next){
           if (err){
               res.send(err);
           }
+          console.log(JSON.stringify(kayit));
           res.json(kayit);
       });
 }
