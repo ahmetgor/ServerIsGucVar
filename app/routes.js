@@ -44,6 +44,8 @@ module.exports = function(app){
 
     apiRoutes.use('/ozgecmis', ozgecmisRoutes);
     // aktiviteRoutes.get('/ozgecmis', AktiviteController.getBasvurular);
+    ozgecmisRoutes.put('/:ozgecmis_id/:param_name', OzgecmisController.updateOzgecmis);
+    ozgecmisRoutes.put('/:ozgecmis_id', OzgecmisController.updateOzgecmisAll);
     ozgecmisRoutes.get('/:ozgecmis_id', OzgecmisController.getOzgecmis);
     // ozgecmisRoutes.post('/', OzgecmisController.createBasvuru);
     // ozgecmisRoutes.delete('/', OzgecmisController.deleteBasvuru);

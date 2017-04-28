@@ -30,7 +30,7 @@ var IlanSchema = new mongoose.Schema({
 
     egitim: {
       type: [String],
-      enum: ['Lise', 'Lisans', 'Yüksek Lisans & Doktora'],
+      enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
       required: true
     },
 
