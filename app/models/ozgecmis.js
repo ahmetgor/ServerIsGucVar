@@ -55,7 +55,7 @@ var OzgecmisSchema = new mongoose.Schema({
       }
     },
 
-    tecrube: {
+    tecrube: [{
       firma: {
         type: String,
         required: true
@@ -86,7 +86,7 @@ var OzgecmisSchema = new mongoose.Schema({
       detay: {
         type: String,
       }
-    },
+    }],
 
     yabanciDil: {
       dil: {

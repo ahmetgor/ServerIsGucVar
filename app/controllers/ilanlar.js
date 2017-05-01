@@ -46,7 +46,7 @@ exports.getIlanlar = function(req, res, next){
         }
         res.json(kayitlar);
 
-    }).sort(order);
+    }).sort({_id: -1});
 }
 
   exports.getIlan = function(req, res, next){
