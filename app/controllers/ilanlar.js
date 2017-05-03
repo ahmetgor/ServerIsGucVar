@@ -37,7 +37,7 @@ exports.getIlanlar = function(req, res, next){
     Ilan.find(
       {
     $and : [ {firma: firma}, tecrube, egitim,
-      { $or: [{isim: st}, {aciklama: st}, {firma: st} ] }
+      { $or: [{baslik: st}, {aciklama: st}, {firma: st} ] }
     ]
 }
 ,function(err, kayitlar) {
@@ -46,7 +46,8 @@ exports.getIlanlar = function(req, res, next){
         }
         res.json(kayitlar);
 
-    }).sort({_id: -1});
+    }).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
+      .sort({_id: -1});
 }
 
   exports.getIlan = function(req, res, next){
