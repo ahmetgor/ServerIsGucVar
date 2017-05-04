@@ -3,20 +3,23 @@ var Kaydedilen = require('../models/kaydedilen');
 
 exports.getBasvurular = function(req, res, next){
   // var st = new RegExp(req.query.term, "i")
+  console.log(req.query.skip+'   '+req.query.limit);
     Basvuru.find(
       { ozgecmis: req.query.ozgecmis
     // $and : [ query, {owner: owner},
     //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
     // ]
-}).populate({ path: 'basvuru', options: { sort: { guncellemeTarih: -1 }}})
-.exec(function(err, kayitlar) {
+}
+,function(err, kayitlar) {
 
-        if (err){
-            res.send(err);
-        }
-        res.json(kayitlar);
-    });
-    // .sort({guncellemeTarih: -1});
+      if (err){
+          res.send(err);
+      }
+      res.json(kayitlar);
+  } )
+.populate({ path: 'basvuru' }
+// .exec(
+).sort({guncellemeTarih: -1}).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
 }
 
 exports.getKaydedilenler = function(req, res, next){
@@ -26,14 +29,16 @@ exports.getKaydedilenler = function(req, res, next){
     // $and : [ query, {owner: owner},
     //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
     // ]
-}).populate({ path: 'kaydedilen', options: { sort: { guncellemeTarih: -1 }}})
-.exec(function(err, kayitlar) {
+} ,function(err, kayitlar) {
 
-        if (err){
-            res.send(err);
-        }
-        res.json(kayitlar);
-    });
+      if (err){
+          res.send(err);
+      }
+      res.json(kayitlar);
+  } )
+.populate({ path: 'kaydedilen' }
+// .exec(
+).sort({guncellemeTarih: -1}).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
     // .sort({guncellemeTarih: -1});
 }
 
