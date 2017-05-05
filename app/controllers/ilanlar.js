@@ -6,7 +6,6 @@ exports.getIlanlar = function(req, res, next){
   var kayit = JSON.parse(req.query.kayit);
 
   if (kayit.tecrube!=undefined && kayit.tecrube.length > 0) {
-    // var tecrube = JSON.parse("{tecrube:{ $in:"+JSON.stringify(kayit.tecrube)+" }}");
     var tecrube = {tecrube:{ $in :kayit.tecrube }};
     console.log('OK');
   }
@@ -16,7 +15,6 @@ exports.getIlanlar = function(req, res, next){
   }
 
   if (kayit.egitim!=undefined && kayit.egitim.length > 0) {
-    // var tecrube = JSON.parse("{tecrube:{ $in:"+JSON.stringify(kayit.tecrube)+" }}");
     var egitim = {egitim:{ $in :kayit.egitim }};
     console.log('OK');
   }
@@ -27,16 +25,14 @@ exports.getIlanlar = function(req, res, next){
 
   var firma = new RegExp(kayit.firma, "i")
   var order = JSON.parse(req.query.orderBy);
+  var il = new RegExp(kayit.il, "i")
   // console.log(req.query.orderBy);
   // console.log(JSON.stringify(order)+'order');
-  // console.log(firma+'firma');
-  // console.log(JSON.stringify(egitim)+'egitim');
-  // console.log(JSON.stringify(tecrube)+'tecrube');
-  // console.log(kayit.egitim+'egitim query');
-  // console.log(st+'st');
+  console.log(JSON.stringify(kayit.il)+'il');
+
     Ilan.find(
       {
-    $and : [ {firma: firma}, tecrube, egitim,
+    $and : [ {firma: firma}, tecrube, egitim, {il: il},
       { $or: [{baslik: st}, {aciklama: st}, {firma: st} ] }
     ]
 }

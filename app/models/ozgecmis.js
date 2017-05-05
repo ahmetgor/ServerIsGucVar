@@ -161,6 +161,10 @@ var OzgecmisSchema = new mongoose.Schema({
     bilgisayar: {
         type: String,
         required: true
+    },
+
+    enabled: {
+        type: Boolean
     }
 
 }, {
