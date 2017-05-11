@@ -11,9 +11,9 @@ function generateToken(user){
 function setUserInfo(request){
     return {
         _id: request._id,
-        email: request.email,
-        role: request.role,
-        firma: request.firma
+        email: request.email
+        // role: request.role,
+        // firma: request.firma
 
     };
 }
@@ -33,13 +33,13 @@ exports.register = function(req, res, next){
 
     var email = req.body.email;
     var password = req.body.password;
-    var role = req.body.role;
-    var firma = req.body.firma;
+    // var role = req.body.role;
+    // var firma = req.body.firma;
     var enabled = false;
 
-    if (role == 'creator') {
-      enabled = true;
-    }
+    // if (role == 'creator') {
+    //   enabled = true;
+    // }
 
     if(!email){
         return res.status(422).send({error: 'Email girmediniz!'});
@@ -48,8 +48,8 @@ exports.register = function(req, res, next){
     if(!password){
         return res.status(422).send({error: 'Şifre girmediniz!'});
     }
-
-    User.findOne({email: {'$regex': email, $options:'i'}}, function(err, existingUser){
+// {email: {'$regex': email, $options:'i'}}
+    User.findOne({email: email}, function(err, existingUser){
 
         if(err){
             return next(err);
@@ -60,25 +60,21 @@ exports.register = function(req, res, next){
             return res.status(422).send({error: 'Bu email kullanımda!'});
         }
 
-        User.findOne({firma: {'$regex': firma, $options:'i'}, role: 'creator'}, function(err, existingCreator){
-
-          if(err){
-              return next(err);
-          }
-
-          if(existingCreator && role=='creator'){
-            // console.log('Firmada yönetici mevcut');
-              return res.status(422).send({error: 'Firmada yönetici mevcut, lütfen başka rol seçiniz!'});
-          }
-          else if (!existingCreator && role!='creator') {
-            return res.status(422).send({error: 'Yeni firmanın yöneticisi olmalı, lütfen yönetici rol seçiniz!'});
-          }
+        // User.findOne({firma: {'$regex': firma, $options:'i'}, role: 'creator'}, function(err, existingCreator){
+        //
+        //   if(err){
+        //       return next(err);
+        //   }
+        //   if(existingCreator && role=='creator'){
+        //       return res.status(422).send({error: 'Firmada yönetici mevcut, lütfen başka rol seçiniz!'});
+        //   }
+        //   else if (!existingCreator && role!='creator') {
+        //     return res.status(422).send({error: 'Yeni firmanın yöneticisi olmalı, lütfen yönetici rol seçiniz!'});
+        //   }
 
         var user = new User({
             email: email,
             password: password,
-            role: role,
-            firma: firma,
             enabled: enabled
         });
 
@@ -97,32 +93,29 @@ exports.register = function(req, res, next){
 
         });
       });
-
-    });
+    // });
 }
 
-exports.roleAuthorization = function(roles){
-
-    return function(req, res, next){
-
-        var user = req.user;
-
-        User.findById(user._id, function(err, foundUser){
-
-            if(err){
-                res.status(422).json({error: 'No user found.'});
-                return next(err);
-            }
-
-            if(roles.indexOf(foundUser.role) > -1 && foundUser.enabled){
-              // console.log('founduser '+foundUser.enabled);
-                return next();
-            }
-
-            res.status(401).json({error: 'You are not authorized to view this content'});
-            return next('Not authorized');
-
-        });
-
-    }
-}
+// exports.roleAuthorization = function(roles){
+//
+//     return function(req, res, next){
+//
+//         var user = req.user;
+//
+//         User.findById(user._id, function(err, foundUser){
+//
+//             if(err){
+//                 res.status(422).json({error: 'No user found.'});
+//                 return next(err);
+//             }
+//
+//             if(roles.indexOf(foundUser.role) > -1 && foundUser.enabled){
+//               // console.log('founduser '+foundUser.enabled);
+//                 return next();
+//             }
+//
+//             res.status(401).json({error: 'You are not authorized to view this content'});
+//             return next('Not authorized');
+//         });
+//     }
+// }

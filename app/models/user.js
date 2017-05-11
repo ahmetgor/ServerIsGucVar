@@ -13,17 +13,6 @@ var UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    role: {
-        type: String,
-        enum: ['reader', 'creator', 'editor'],
-        default: 'reader',
-        required: true
-    },
-    firma: {
-        type: String,
-        required: true,
-        lowercase: true
-    },
     enabled: {
         type: Boolean
       }

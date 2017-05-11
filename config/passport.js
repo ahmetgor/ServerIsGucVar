@@ -6,16 +6,16 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 var LocalStrategy = require('passport-local').Strategy;
 
 var localOptions = {
-    usernameField: 'email',
-    passReqToCallback: true
+    usernameField: 'email'
+    // passReqToCallback: true
 };
 
-var localLogin = new LocalStrategy(localOptions, function(req, email, password, done){
+var localLogin = new LocalStrategy(localOptions, function(email, password, done){
 
   // console.log(JSON.stringify(req.body)+'req');
     User.findOne({
         email: email,
-        firma: {'$regex': req.body.firma, $options:'i'},
+        // firma: {'$regex': req.body.firma, $options:'i'},
         enabled: true
         // role: req.body.role
     }, function(err, user){
@@ -29,7 +29,7 @@ var localLogin = new LocalStrategy(localOptions, function(req, email, password, 
         }
 
         if(user && user.enabled == false){
-            return done(null, false, {error: 'Hesabınız yönetici tarafından aktive edilmedi'});
+            return done(null, false, {error: 'Hesabınız aktif değil'});
         }
 
         user.comparePassword(password, function(err, isMatch){

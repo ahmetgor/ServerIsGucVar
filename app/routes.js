@@ -27,6 +27,7 @@ module.exports = function(app){
     authRoutes.get('/protected', requireAuth, function(req, res){
         res.send({ content: 'Success'});
     });
+    
     apiRoutes.use('/users', userRoutes);
 
     userRoutes.get('/', requireAuth, UsersController.getUsers);
