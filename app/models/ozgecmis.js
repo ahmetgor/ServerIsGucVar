@@ -17,6 +17,11 @@ var OzgecmisSchema = new mongoose.Schema({
         required: true
     },
 
+    unvan: {
+        type: String,
+        required: true
+    },
+
     dogumTarihi: {
         type: Date,
         required: true
