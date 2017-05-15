@@ -25,10 +25,12 @@ var localLogin = new LocalStrategy(localOptions, function(email, password, done)
         }
 
         if(!user){
+          console.log("user");
             return done(null, false, {error: 'Girdiğiniz bilgilerden en az biri hatalı'});
         }
 
         if(user && user.enabled == false){
+          console.log("enabled");
             return done(null, false, {error: 'Hesabınız aktif değil'});
         }
 
@@ -39,6 +41,7 @@ var localLogin = new LocalStrategy(localOptions, function(email, password, done)
             }
 
             if(!isMatch){
+              console.log("pass");
                 return done(null, false, {error: 'Girdiğiniz bilgilerden en az biri hatalı'});
             }
 

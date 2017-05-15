@@ -3,6 +3,7 @@ var AuthenticationController = require('./controllers/authentication'),
     AktiviteController = require('./controllers/aktiviteler'),
     UsersController = require('./controllers/users'),
     OzgecmisController = require('./controllers/ozgecmisler'),
+    HashController = require('./controllers/hash'),
     express = require('express'),
     passportService = require('../config/passport'),
     passport = require('passport');
@@ -27,13 +28,14 @@ module.exports = function(app){
     authRoutes.get('/protected', requireAuth, function(req, res){
         res.send({ content: 'Success'});
     });
-    
-    apiRoutes.use('/users', userRoutes);
 
-    userRoutes.get('/', requireAuth, UsersController.getUsers);
-    userRoutes.get('/:email', requireAuth, UsersController.getUser);
-    userRoutes.delete('/:user_id', requireAuth, AuthenticationController.roleAuthorization(['creator']), UsersController.deleteUser);
-    userRoutes.put('/:user_id', requireAuth, AuthenticationController.roleAuthorization(['creator']), UsersController.updateUser);
+    apiRoutes.get('/hash', HashController.getHash )
+    // apiRoutes.use('/users', userRoutes);
+    //
+    // userRoutes.get('/', requireAuth, UsersController.getUsers);
+    // userRoutes.get('/:email', requireAuth, UsersController.getUser);
+    // userRoutes.delete('/:user_id', requireAuth, AuthenticationController.roleAuthorization(['creator']), UsersController.deleteUser);
+    // userRoutes.put('/:user_id', requireAuth, AuthenticationController.roleAuthorization(['creator']), UsersController.updateUser);
 
     // Todo Routes
     apiRoutes.use('/ilanlar', todoRoutes);
