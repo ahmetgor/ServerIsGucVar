@@ -7,6 +7,21 @@ var OzgecmisSchema = new mongoose.Schema({
       required: true
   },
 
+  resim: {
+    link: {
+      type: String,
+      required: true
+    },
+    media: {
+      type: String,
+      required: true
+    },
+    profile: {
+      type: String,
+      required: true
+    }
+  },
+
     isim: {
         type: String,
         required: true
@@ -30,6 +45,11 @@ var OzgecmisSchema = new mongoose.Schema({
     tc: {
         type: String,
         enum: ['Evet', 'Hayır'],
+        required: true
+    },
+
+    yilTecrube: {
+        type: Number,
         required: true
     },
 
@@ -126,11 +146,11 @@ var OzgecmisSchema = new mongoose.Schema({
       required: true
     },
 
-    tecrubedurum: {
-      type: [String],
-      enum: ['Az Tecrübeli (Junior)', 'Orta Tecrübeli (Midlevel)', 'Çok Tecrübeli (Senior)', 'Yönetici (Manager)', 'Stajyer', 'Hizmet Personeli & İşçi'],
-      required: true
-    },
+    // tecrubedurum: {
+    //   type: [String],
+    //   enum: ['Az Tecrübeli (Junior)', 'Orta Tecrübeli (Midlevel)', 'Çok Tecrübeli (Senior)', 'Yönetici (Manager)', 'Stajyer', 'Hizmet Personeli & İşçi'],
+    //   required: true
+    // },
 
     ehliyet: {
         type: String

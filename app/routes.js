@@ -4,6 +4,7 @@ var AuthenticationController = require('./controllers/authentication'),
     UsersController = require('./controllers/users'),
     OzgecmisController = require('./controllers/ozgecmisler'),
     HashController = require('./controllers/hash'),
+    AvatarController = require('./controllers/cloudinary'),
     express = require('express'),
     passportService = require('../config/passport'),
     passport = require('passport');
@@ -19,6 +20,7 @@ module.exports = function(app){
         userRoutes = express.Router();
         aktiviteRoutes = express.Router();
         ozgecmisRoutes = express.Router();
+
     // Auth Routes
     apiRoutes.use('/auth', authRoutes);
 
@@ -29,7 +31,9 @@ module.exports = function(app){
         res.send({ content: 'Success'});
     });
 
-    apiRoutes.get('/hash', HashController.getHash )
+    // apiRoutes.get('/hash', Hash Controller.getHash );
+    apiRoutes.get('/tools/avatar', AvatarController.getAvatar);
+
     // apiRoutes.use('/users', userRoutes);
     //
     // userRoutes.get('/', requireAuth, UsersController.getUsers);
@@ -50,6 +54,7 @@ module.exports = function(app){
     ozgecmisRoutes.put('/:ozgecmis_id/:param_name', OzgecmisController.updateOzgecmis);
     ozgecmisRoutes.put('/:ozgecmis_id', OzgecmisController.updateOzgecmisAll);
     ozgecmisRoutes.get('/:ozgecmis_id', OzgecmisController.getOzgecmis);
+    ozgecmisRoutes.get('/avatar', OzgecmisController.getAvatar);
     // ozgecmisRoutes.post('/', OzgecmisController.createBasvuru);
     // ozgecmisRoutes.delete('/', OzgecmisController.deleteBasvuru);
 

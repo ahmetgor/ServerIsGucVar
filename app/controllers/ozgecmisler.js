@@ -1,4 +1,5 @@
 var Ozgecmis = require('../models/ozgecmis');
+var AvatarsIO = require('avatars.io');
 
 exports.getOzgecmis = function(req, res, next){
       Ozgecmis.findOne({ _id: req.params.ozgecmis_id }, function(err, kayit) {
@@ -39,4 +40,18 @@ exports.updateOzgecmisAll = function(req, res, next){
       }
         res.json(kayit);
     });
+}
+
+exports.getAvatar = function(req, res, next){
+
+AvatarsIO.appId = '123456';
+AvatarsIO.accessToken = '123456';
+AvatarsIO.upload('1387fe463bd02cf86c9a1bac0add69e9.jpg', function(err, url){
+	// url is a URL of just uploaded avatar
+  console.log(url);
+  if (err){
+      res.send(err);
+  }
+  res.send(url);
+});
 }
