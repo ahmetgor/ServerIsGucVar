@@ -32,7 +32,7 @@ module.exports = function(app){
     });
 
     // apiRoutes.get('/hash', Hash Controller.getHash );
-    apiRoutes.get('/tools/avatar', AvatarController.getAvatar);
+    apiRoutes.post('/tools/avatar', AvatarController.postAvatar);
 
     // apiRoutes.use('/users', userRoutes);
     //

@@ -6,10 +6,14 @@ cloudinary.config({
   api_secret: 'MgNsTRvxidEy0HaIARj4Ip7Txq0'
 });
 
-exports.getAvatar = function(req, res, next){
+exports.postAvatar = function(req, res, next){
+  // console.log(JSON.stringify(req.body.resim)+'body');
+  // console.log(JSON.stringify(req.body.resim)+'body');
 
-cloudinary.uploader.upload(req.url, function(result) {
-  console.log(result);
+cloudinary.uploader.upload(req.body.resim, function(err,result) {
+  console.log(JSON.stringify(result)+'result');
+  console.log(JSON.stringify(err)+'err');
+
   res.json(result);
 });
 }
