@@ -26,7 +26,7 @@ exports.getIlanlar = function(req, res, next){
   var firma = new RegExp(kayit.firma, "i")
   var order = JSON.parse(req.query.orderBy);
   var il = new RegExp(kayit.il, "i")
-  // console.log(req.query.orderBy);
+  console.log(kayit.tecrube+'tecrube');
   // console.log(JSON.stringify(order)+'order');
   console.log(JSON.stringify(kayit.il)+'il');
 

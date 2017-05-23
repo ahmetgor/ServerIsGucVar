@@ -20,8 +20,8 @@ var allowCrossDomain = function(req, res, next) {
     next();
 }
 
-app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' })); // Parses urlencoded bodies
-app.use(bodyParser.json({limit: '50mb'})); // Send JSON responses
+app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' })); // Parses urlencoded bodies
+app.use(bodyParser.json({limit: '10mb'})); // Send JSON responses
 app.use(allowCrossDomain);
 app.use(logger('dev')); // Log requests to API using morgan
 app.use(cors());
