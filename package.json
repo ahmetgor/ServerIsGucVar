@@ -1,7 +1,7 @@
 {
-  "name": "ionic2-roles",
+  "name": "ServerIsGucVar",
   "version": "0.1.0",
-  "description": "A sample Node.js app using Express 4",
+  "description": "Isgucvar Server",
   "engines": {
     "node": "5.9.1"
   },
@@ -10,15 +10,19 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "async": "^2.4.1",
     "avatars.io": "^0.1.6",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "cloudinary": "^1.9.0",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "express": "^4.14.0",
+    "express-session": "^1.15.3",
     "jsonwebtoken": "^7.1.9",
-    "mongoose": "^4.6.3",
+    "mongoose": "^4.10.2",
     "morgan": "^1.7.0",
+    "nodemailer": "^4.0.1",
     "passport": "^0.3.2",
     "passport-jwt": "^2.1.0",
     "passport-local": "^1.0.0"

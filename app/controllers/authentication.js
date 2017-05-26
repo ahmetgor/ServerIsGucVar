@@ -35,7 +35,7 @@ exports.register = function(req, res, next){
     var password = req.body.password;
     // var role = req.body.role;
     // var firma = req.body.firma;
-    var enabled = false;
+    var enabled = true;
 
     // if (role == 'creator') {
     //   enabled = true;
