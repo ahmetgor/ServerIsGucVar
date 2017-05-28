@@ -4,12 +4,12 @@ var mongoose = require('mongoose');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 
 var databaseConfig = require('./config/database');
 var router = require('./app/routes');
 
-var session = require('express-session')
+// var session = require('express-session')
 var nodemailer = require('nodemailer');
 var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
@@ -29,7 +29,7 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' })); // Parses urlencoded bodies
 app.use(bodyParser.json({limit: '10mb'})); // Send JSON responses
-app.use(cookieParser());
+// app.use(cookieParser());
 // app.use(session({ secret: 'session secret key' }));
 app.use(allowCrossDomain);
 app.use(logger('dev')); // Log requests to API using morgan

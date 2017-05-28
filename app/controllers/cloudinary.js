@@ -55,14 +55,14 @@ exports.postForgot = function(req, res, next) {
       var mailOptions = {
         to: user.email,
         from: 'agor.yazilim@gmail.com',
-        subject: 'IsGucVar Şifre Reset',
+        subject: 'İşGüçVar Şifre Reset',
         text: 'Merhaba,\n\n' +
           'Bu mail şifrenizin resetlenmesi isteğine istinaden atılmıştır.\n\n' +
-          'Eğer böyle ise aşağıdaki linke tıklayın veya linki kopyalayıp tarayıcınıza yapıştırın.\n\n' +
-          'http://' + req.headers.host + '/tools/reset/' + token + '\n\n' +
+          'Eğer böyle ise aşağıdaki geçici şifreyi kullanarak şifrenizi değiştirebilirsiniz.\n\n' +
+          token + '\n\n' +
           'Eğer bu istek sizin tarafınızdan yapılmadıysa lütfen bu maili yoksayın. Şifreniz aynı kalacaktır. \n\n' +
           'Görüşmek üzere :) \n'+
-          'IsGucVar Ekibi \n'
+          'İşGüçVar Ekibi \n'
       };
       smtpTransport.sendMail(mailOptions, function(err) {
 
@@ -78,12 +78,54 @@ exports.postForgot = function(req, res, next) {
   });
 }
 
-exports.resetPass = function(req, res) {
-  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
-    if (!user) {
-      return res.status(422).send({error: 'Reset linki geçersiz veya süresi doldu.'});
+exports.resetPass = function(req, res, next) {
+  async.waterfall([
+    function(done) {
+      User.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }}, function(err, user) {
+        if (!user) {
+          return res.status(422).send({error: 'Email bulunamadı'});
+        }
 
+        user.password = req.body.password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        user.save(function(err) {
+          if (err){
+              res.send(err);
+          }
+          done(err, user);
+        });
+      });
+    },
+    function(user, done) {
+      var smtpTransport = nodemailer.createTransport( {
+        service: 'Gmail',
+        auth: {
+          user: 'agor.yazilim@gmail.com',
+          pass: 'musamba01'
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'agor.yazilim@gmail.com',
+        subject: 'İşGüçVar şifreniz değişti',
+        text: 'Merhaba,\n\n' +
+          user.email + ' hesabı için şifreniz değişti.\n\n' +
+          'Görüşmek üzere :) \n'+
+          'İşGüçVar Ekibi \n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        if (err){
+            res.send(err);
+        }
+        res.send('success');
+
+      });
     }
-    res.json(user);
-  });
-}
+  ], function(err) {
+    if (err){
+        res.send(err);
+      }
+      });
+    }

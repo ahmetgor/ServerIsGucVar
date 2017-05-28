@@ -46,11 +46,8 @@ var localLogin = new LocalStrategy(localOptions, function(email, password, done)
             }
 
             return done(null, user);
-
         });
-
     });
-
 });
 
 var jwtOptions = {
@@ -71,9 +68,7 @@ var jwtLogin = new JwtStrategy(jwtOptions, function(payload, done){
         } else {
             done(null, false);
         }
-
     });
-
 });
 
 passport.use(jwtLogin);

@@ -35,7 +35,7 @@ exports.register = function(req, res, next){
     var password = req.body.password;
     // var role = req.body.role;
     // var firma = req.body.firma;
-    var enabled = true;
+    var enabled = false;
 
     // if (role == 'creator') {
     //   enabled = true;
@@ -83,14 +83,11 @@ exports.register = function(req, res, next){
             if(err){
                 return next(err);
             }
-
             // var userInfo = setUserInfo(user);
-
             res.status(201).json({
                 // token: 'JWT ' + generateToken(userInfo),
                 // user: userInfo
             })
-
         });
       });
     // });

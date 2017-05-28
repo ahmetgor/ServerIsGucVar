@@ -34,7 +34,7 @@ module.exports = function(app){
     // apiRoutes.get('/hash', Hash Controller.getHash );
     apiRoutes.post('/tools/avatar', requireAuth, AvatarController.postAvatar);
     apiRoutes.post('/tools/forgot', AvatarController.postForgot);
-    apiRoutes.get('/tools/reset/:token', AvatarController.resetPass);
+    apiRoutes.post('/tools/reset', AvatarController.resetPass);
 
 
     // apiRoutes.use('/users', userRoutes);
