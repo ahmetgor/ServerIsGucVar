@@ -81,7 +81,8 @@ exports.postForgot = function(req, res, next) {
 exports.resetPass = function(req, res, next) {
   async.waterfall([
     function(done) {
-      User.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }}, function(err, user) {
+      User.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }},
+      function(err, user) {
         if (!user) {
           return res.status(422).send({error: 'Email veya geçici şifre hatalı, belki de geçici şifrenin süresi doldu, tekrar resetlemeyi deneyin'});
         }

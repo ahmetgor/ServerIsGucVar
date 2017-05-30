@@ -1,5 +1,6 @@
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
+var Ozgecmis = require('../models/ozgecmis');
 var authConfig = require('../../config/auth');
 
 function generateToken(user){
@@ -11,7 +12,8 @@ function generateToken(user){
 function setUserInfo(request){
     return {
         _id: request._id,
-        email: request.email
+        email: request.email,
+        ozgecmis: request.ozgecmis
         // role: request.role,
         // firma: request.firma
 
@@ -35,7 +37,7 @@ exports.register = function(req, res, next){
     var password = req.body.password;
     // var role = req.body.role;
     // var firma = req.body.firma;
-    var enabled = false;
+    var enabled = true;
 
     // if (role == 'creator') {
     //   enabled = true;
@@ -60,29 +62,63 @@ exports.register = function(req, res, next){
             return res.status(422).send({error: 'Bu email kullanımda!'});
         }
 
-        // User.findOne({firma: {'$regex': firma, $options:'i'}, role: 'creator'}, function(err, existingCreator){
-        //
-        //   if(err){
-        //       return next(err);
-        //   }
-        //   if(existingCreator && role=='creator'){
-        //       return res.status(422).send({error: 'Firmada yönetici mevcut, lütfen başka rol seçiniz!'});
-        //   }
-        //   else if (!existingCreator && role!='creator') {
-        //     return res.status(422).send({error: 'Yeni firmanın yöneticisi olmalı, lütfen yönetici rol seçiniz!'});
-        //   }
-
         var user = new User({
             email: email,
             password: password,
             enabled: enabled
         });
 
+        var ozgecmis = new Ozgecmis({
+    "tecrube" : [{
+      "firma" : "",
+      "pozisyon" : "",
+      "giris" : "",
+      "cikis" : "",
+      "sehir" : "",
+      "isTanimiKisa" : "",
+      "detay" : "",
+      "ulke" : ""
+    }
+    ],
+    "egitim" : [{
+      "okul" : "",
+      "bolum" : "",
+      "derece" : "",
+      "cikis" : "",
+      "sehir" : "",
+      "ulke" : ""
+    }
+    ],
+    "yabanciDil" : [{
+      "dil" : "",
+      "seviye" : ""
+    }
+    ],
+    "sertifika" : [{
+      "ad" : "",
+      "cikis" : "",
+      "kurum" : ""
+    }
+    ],
+    "resim" : {
+      "link" : "",
+      "media" : "",
+      "profile" : ""
+    }
+});
+
+        ozgecmis.save(function(err,ozgecmis) {
+          if(err){
+              return next(err);
+          }
+          user.ozgecmis = ozgecmis._id;
+
         user.save(function(err, user){
 
             if(err){
                 return next(err);
             }
+
             // var userInfo = setUserInfo(user);
             res.status(201).json({
                 // token: 'JWT ' + generateToken(userInfo),
@@ -90,7 +126,7 @@ exports.register = function(req, res, next){
             })
         });
       });
-    // });
+      });
 }
 
 // exports.roleAuthorization = function(roles){

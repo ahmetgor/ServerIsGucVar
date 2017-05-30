@@ -18,7 +18,11 @@ var UserSchema = new mongoose.Schema({
       },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  activateToken: String
+  activateToken: String,
+  ozgecmis: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Ozgecmis'
+  },
   },
 
     {

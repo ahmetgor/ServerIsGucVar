@@ -4,59 +4,59 @@ var OzgecmisSchema = new mongoose.Schema({
 
   id: {
       type: Number,
-      required: true
+      //required: true
   },
 
   resim: {
     link: {
       type: String,
-      required: true
+      ////required: true
     },
     media: {
       type: String,
-      required: true
+      //required: true
     },
     profile: {
       type: String,
-      required: true
+      //required: true
     }
   },
 
     isim: {
         type: String,
-        required: true
+        //required: true
     },
 
     soyisim: {
         type: String,
-        required: true
+        //required: true
     },
 
     unvan: {
         type: String,
-        required: true
+        //required: true
     },
 
     dogumTarihi: {
         type: Date,
-        required: true
+        //required: true
     },
 
     tc: {
         type: String,
         enum: ['Evet', 'Hayır'],
-        required: true
+        //required: true
     },
 
     yilTecrube: {
         type: Number,
-        required: true
+        //required: true
     },
 
     egitim: {
       okul: {
         type: String,
-        required: true
+        //required: true
       },
       bolum: {
         type: String,
@@ -64,49 +64,49 @@ var OzgecmisSchema = new mongoose.Schema({
       derece: {
         type: String,
         enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
-        required: true
+        //required: true
       },
       cikis: {
         type: Date,
-        required: true
+        //required: true
       },
       sehir: {
         type: String,
-        required: true
+        //required: true
       },
       ulke: {
         type: String,
-        required: true
+        //required: true
       }
     },
 
     tecrube: [{
       firma: {
         type: String,
-        required: true
+        //required: true
       },
       pozisyon: {
         type: String,
       },
       giris: {
         type: Date,
-        required: true
+        //required: true
       },
       cikis: {
         type: Date,
-        required: true
+        //required: true
       },
       sehir: {
         type: String,
-        required: true
+        //required: true
       },
       ulke: {
         type: String,
-        required: true
+        //required: true
       },
       isTanimiKisa: {
         type: String,
-        required: true
+        //required: true
       },
       detay: {
         type: String,
@@ -116,40 +116,40 @@ var OzgecmisSchema = new mongoose.Schema({
     yabanciDil: {
       dil: {
         type: String,
-        required: true
+        //required: true
       },
       seviye: {
         type: String,
         enum: ['Orta', 'İyi', 'Çok İyi', 'Mükemmel'],
-        required: true
+        //required: true
       }
     },
 
     sertifika: {
       ad: {
         type: String,
-        required: true
+        //required: true
       },
       cikis: {
         type: Date,
-        required: true
+        //required: true
       },
       kurum: {
         type: String,
-        required: true
+        //required: true
       }
     },
 
     egitimdurum: {
       type: String,
       enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
-      required: true
+      //required: true
     },
 
     // tecrubedurum: {
     //   type: [String],
     //   enum: ['Az Tecrübeli (Junior)', 'Orta Tecrübeli (Midlevel)', 'Çok Tecrübeli (Senior)', 'Yönetici (Manager)', 'Stajyer', 'Hizmet Personeli & İşçi'],
-    //   required: true
+    //   //required: true
     // },
 
     ehliyet: {
@@ -159,33 +159,33 @@ var OzgecmisSchema = new mongoose.Schema({
     askerlik: {
       type: String,
       enum: ['Yapıldı & Muaf', 'Yapılmadı & Tecilli'],
-      required: true
+      //required: true
     },
 
     medeni: {
       type: String,
       enum: ['Evli', 'Bekar'],
-      required: true
+      //required: true
     },
 
     telefon: {
         type: Number,
-        required: true
+        //required: true
     },
 
     email: {
         type: String,
-        required: true
+        //required: true
     },
 
     adres: {
         type: String,
-        required: true
+        //required: true
     },
 
     bilgisayar: {
         type: String,
-        required: true
+        //required: true
     },
 
     enabled: {

@@ -42,16 +42,16 @@ exports.updateOzgecmisAll = function(req, res, next){
     });
 }
 
-exports.getAvatar = function(req, res, next){
-
-AvatarsIO.appId = '123456';
-AvatarsIO.accessToken = '123456';
-AvatarsIO.upload('1387fe463bd02cf86c9a1bac0add69e9.jpg', function(err, url){
-	// url is a URL of just uploaded avatar
-  console.log(url);
-  if (err){
-      res.send(err);
-  }
-  res.send(url);
-});
-}
+// exports.getAvatar = function(req, res, next){
+//
+// AvatarsIO.appId = '123456';
+// AvatarsIO.accessToken = '123456';
+// AvatarsIO.upload('1387fe463bd02cf86c9a1bac0add69e9.jpg', function(err, url){
+// 	// url is a URL of just uploaded avatar
+//   console.log(url);
+//   if (err){
+//       res.send(err);
+//   }
+//   res.send(url);
+// });
+// }
