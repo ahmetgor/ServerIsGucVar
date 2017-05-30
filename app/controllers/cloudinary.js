@@ -83,7 +83,7 @@ exports.resetPass = function(req, res, next) {
     function(done) {
       User.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }}, function(err, user) {
         if (!user) {
-          return res.status(422).send({error: 'Email bulunamadı'});
+          return res.status(422).send({error: 'Email veya geçici şifre hatalı, belki de geçici şifrenin süresi doldu, tekrar resetlemeyi deneyin'});
         }
 
         user.password = req.body.password;
@@ -117,7 +117,7 @@ exports.resetPass = function(req, res, next) {
       };
       smtpTransport.sendMail(mailOptions, function(err) {
         if (err){
-            res.send(err);
+          return res.status(422).send({error: 'Reset Emaili gönderilemedi'});
         }
         res.send('success');
 
