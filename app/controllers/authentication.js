@@ -16,7 +16,6 @@ function setUserInfo(request){
         ozgecmis: request.ozgecmis
         // role: request.role,
         // firma: request.firma
-
     };
 }
 
@@ -35,13 +34,7 @@ exports.register = function(req, res, next){
 
     var email = req.body.email;
     var password = req.body.password;
-    // var role = req.body.role;
-    // var firma = req.body.firma;
     var enabled = true;
-
-    // if (role == 'creator') {
-    //   enabled = true;
-    // }
 
     if(!email){
         return res.status(422).send({error: 'Email girmediniz!'});
@@ -104,7 +97,8 @@ exports.register = function(req, res, next){
       "link" : "",
       "media" : "",
       "profile" : ""
-    }
+    },
+    "enabled" : false
 });
 
         ozgecmis.save(function(err,ozgecmis) {
@@ -118,7 +112,6 @@ exports.register = function(req, res, next){
             if(err){
                 return next(err);
             }
-
             // var userInfo = setUserInfo(user);
             res.status(201).json({
                 // token: 'JWT ' + generateToken(userInfo),

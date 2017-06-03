@@ -27,11 +27,6 @@ var OzgecmisSchema = new mongoose.Schema({
         //required: true
     },
 
-    soyisim: {
-        type: String,
-        //required: true
-    },
-
     unvan: {
         type: String,
         //required: true

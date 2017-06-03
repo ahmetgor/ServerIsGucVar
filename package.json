@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Isgucvar Server",
   "engines": {
-    "node": "5.9.1"
+    "node": "7.1.0",
+    "npm": "3.10.29"
   },
   "main": "server.js",
   "scripts": {
