@@ -4,7 +4,7 @@
   "description": "Isgucvar Server",
   "engines": {
     "node": "7.1.0",
-    "npm": "3.10.29"
+    "npm": "3.10.9"
   },
   "main": "server.js",
   "scripts": {
