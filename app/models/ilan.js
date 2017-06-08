@@ -12,6 +12,11 @@ var IlanSchema = new mongoose.Schema({
         required: true
     },
 
+    resim: {
+        type: String,
+        required: true
+    },
+
     aciklama: {
         type: String,
         required: true
