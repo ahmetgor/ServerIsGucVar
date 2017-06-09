@@ -62,36 +62,40 @@ exports.register = function(req, res, next){
         });
 
         var ozgecmis = new Ozgecmis({
-    "tecrube" : [{
-      "firma" : "",
-      "pozisyon" : "",
-      "giris" : "",
-      "cikis" : "",
-      "sehir" : "",
-      "isTanimiKisa" : "",
-      "detay" : "",
-      "ulke" : ""
-    }
+    "tecrube" : [
+    //   {
+    //   "firma" : "",
+    //   "pozisyon" : "",
+    //   "giris" : "",
+    //   "cikis" : "",
+    //   "sehir" : "",
+    //   "isTanimiKisa" : "",
+    //   "detay" : "",
+    //   "ulke" : ""
+    // }
     ],
-    "egitim" : [{
-      "okul" : "",
-      "bolum" : "",
-      "derece" : "",
-      "cikis" : "",
-      "sehir" : "",
-      "ulke" : ""
-    }
+    "egitim" : [
+    //   {
+    //   "okul" : "",
+    //   "bolum" : "",
+    //   "derece" : "",
+    //   "cikis" : "",
+    //   "sehir" : "",
+    //   "ulke" : ""
+    // }
     ],
-    "yabanciDil" : [{
-      "dil" : "",
-      "seviye" : ""
-    }
+    "yabanciDil" : [
+    //   {
+    //   "dil" : "",
+    //   "seviye" : ""
+    // }
     ],
-    "sertifika" : [{
-      "ad" : "",
-      "cikis" : "",
-      "kurum" : ""
-    }
+    "sertifika" : [
+    //   {
+    //   "ad" : "",
+    //   "cikis" : "",
+    //   "kurum" : ""
+    // }
     ],
     "resim" : {
       "link" : "",

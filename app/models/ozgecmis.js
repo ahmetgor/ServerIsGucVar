@@ -3,141 +3,141 @@ var mongoose = require('mongoose');
 var OzgecmisSchema = new mongoose.Schema({
 
   id: {
-      type: Number,
+      type: Number
       //required: true
   },
 
   resim: {
     link: {
-      type: String,
+      type: String
       ////required: true
     },
     media: {
-      type: String,
+      type: String
       //required: true
     },
     profile: {
-      type: String,
+      type: String
       //required: true
     }
   },
 
     isim: {
-        type: String,
+        type: String
         //required: true
     },
 
     unvan: {
-        type: String,
+        type: String
         //required: true
     },
 
     dogumTarihi: {
-        type: Date,
+        type: Date
         //required: true
     },
 
     tc: {
         type: String,
-        enum: ['Evet', 'Hayır'],
+        enum: ['Evet', 'Hayır']
         //required: true
     },
 
     yilTecrube: {
-        type: Number,
+        type: Number
         //required: true
     },
 
-    egitim: {
+    egitim: [{
       okul: {
-        type: String,
+        type: String
         //required: true
       },
       bolum: {
-        type: String,
+        type: String
       },
       derece: {
         type: String,
-        enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
+        enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora']
         //required: true
       },
       cikis: {
-        type: Date,
+        type: Date
         //required: true
       },
       sehir: {
-        type: String,
+        type: String
         //required: true
       },
       ulke: {
-        type: String,
+        type: String
         //required: true
-      }
-    },
-
-    tecrube: [{
-      firma: {
-        type: String,
-        //required: true
-      },
-      pozisyon: {
-        type: String,
-      },
-      giris: {
-        type: Date,
-        //required: true
-      },
-      cikis: {
-        type: Date,
-        //required: true
-      },
-      sehir: {
-        type: String,
-        //required: true
-      },
-      ulke: {
-        type: String,
-        //required: true
-      },
-      isTanimiKisa: {
-        type: String,
-        //required: true
-      },
-      detay: {
-        type: String,
       }
     }],
 
-    yabanciDil: {
+    tecrube: [{
+      firma: {
+        type: String
+        //required: true
+      },
+      pozisyon: {
+        type: String
+      },
+      giris: {
+        type: Date
+        //required: true
+      },
+      cikis: {
+        type: Date
+        //required: true
+      },
+      sehir: {
+        type: String
+        //required: true
+      },
+      ulke: {
+        type: String
+        //required: true
+      },
+      isTanimiKisa: {
+        type: String
+        //required: true
+      },
+      detay: {
+        type: String
+      }
+    }],
+
+    yabanciDil: [{
       dil: {
-        type: String,
+        type: String
         //required: true
       },
       seviye: {
         type: String,
-        enum: ['Orta', 'İyi', 'Çok İyi', 'Mükemmel'],
+        enum: ['Orta', 'İyi', 'Çok İyi', 'Mükemmel']
         //required: true
       }
-    },
+    }],
 
-    sertifika: {
+    sertifika: [{
       ad: {
-        type: String,
+        type: String
         //required: true
       },
       cikis: {
-        type: Date,
+        type: Date
         //required: true
       },
       kurum: {
-        type: String,
+        type: String
         //required: true
       }
-    },
+    }],
 
     egitimdurum: {
       type: String,
-      enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
+      enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora']
       //required: true
     },
 
@@ -153,33 +153,33 @@ var OzgecmisSchema = new mongoose.Schema({
 
     askerlik: {
       type: String,
-      enum: ['Yapıldı & Muaf', 'Yapılmadı & Tecilli'],
+      enum: ['Yapıldı & Muaf', 'Yapılmadı & Tecilli']
       //required: true
     },
 
     medeni: {
       type: String,
-      enum: ['Evli', 'Bekar'],
+      enum: ['Evli', 'Bekar']
       //required: true
     },
 
     telefon: {
-        type: Number,
+        type: Number
         //required: true
     },
 
     email: {
-        type: String,
+        type: String
         //required: true
     },
 
     adres: {
-        type: String,
+        type: String
         //required: true
     },
 
     bilgisayar: {
-        type: String,
+        type: String
         //required: true
     },
 
