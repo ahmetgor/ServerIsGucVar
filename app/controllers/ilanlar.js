@@ -55,22 +55,21 @@ exports.getIlanlar = function(req, res, next){
           }
           res.json(kayit);
       });
-
-    Ilan.find(function(err, kayitlar) {
-      console.log('/'+req.query.term+'/');
-
-      if (err){
-          res.send(err);
-      }
-      kayitlar.forEach(function(kayitloop){
-        for (var key in kayitloop) {
-          // console.log(kayitlar[key]);
-          // console.log('hebe');
-          console.log(kayitloop[key]);
-          if (/req.query.term/.test(kayitloop[key]) )
-         printjson(kayitloop);
-    }
-});
-res.json(kayitlar);
-});
+//     Ilan.find(function(err, kayitlar) {
+//       console.log('/'+req.query.term+'/');
+//
+//       if (err){
+//           res.send(err);
+//       }
+//       kayitlar.forEach(function(kayitloop){
+//         for (var key in kayitloop) {
+//           // console.log(kayitlar[key]);
+//           // console.log('hebe');
+//           console.log(kayitloop[key]);
+//           if (/req.query.term/.test(kayitloop[key]) )
+//          printjson(kayitloop);
+//     }
+// });
+// res.json(kayitlar);
+// });
 }
