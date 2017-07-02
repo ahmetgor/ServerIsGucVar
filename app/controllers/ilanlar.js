@@ -24,6 +24,7 @@ exports.getIlanlar = function(req, res, next){
   }
 
   var firma = new RegExp(kayit.firma, "i")
+  var olusturan = new RegExp(kayit.olusturan, "i")
   var order = JSON.parse(req.query.orderBy);
   var il = new RegExp(kayit.il, "i")
   console.log(kayit.tecrube+'tecrube');
@@ -32,8 +33,8 @@ exports.getIlanlar = function(req, res, next){
 
     Ilan.find(
       {
-    $and : [ {firma: firma}, tecrube, egitim, {il: il},
-      { $or: [{baslik: st}, {aciklama: st}, {firma: st} ] }
+    $and : [ {firma: firma}, tecrube, egitim, {il: il}, {olusturan: olusturan},
+      { $or: [{baslik: st}, {aciklama: st}, {firma: st}, {olusturan: st} ] }
     ]
 }
 ,function(err, kayitlar) {
