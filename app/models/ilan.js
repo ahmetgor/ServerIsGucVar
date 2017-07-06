@@ -4,7 +4,7 @@ var IlanSchema = new mongoose.Schema({
 
   id: {
       type: Number,
-      required: true
+      get: v => _id.getTimestamp().getTime()
   },
 
     baslik: {

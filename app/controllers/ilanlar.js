@@ -54,6 +54,8 @@ exports.getIlanlar = function(req, res, next){
           if (err){
               res.send(err);
           }
+          console.log(kayit._id.getTimestamp().getTime());
+          console.log(kayit.id);
           res.json(kayit);
       });
 //     Ilan.find(function(err, kayitlar) {
