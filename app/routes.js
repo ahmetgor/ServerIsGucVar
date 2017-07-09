@@ -46,7 +46,7 @@ module.exports = function(app){
 
     // Todo Routes
     apiRoutes.use('/ilanlar', todoRoutes);
-    todoRoutes.get('/', requireAuth, TodoController.getIlanlar);
+    todoRoutes.get('/', TodoController.getIlanlar);
     todoRoutes.get('/:kayit_id', TodoController.getIlan);
     // todoRoutes.post('/', requireAuth, /* AuthenticationController.roleAuthorization(['creator', 'editor', 'reader']), */ TodoController.createKayit);
     // todoRoutes.delete('/:kayit_id', requireAuth,TodoController.deleteKayit);
@@ -57,6 +57,7 @@ module.exports = function(app){
     ozgecmisRoutes.put('/:ozgecmis_id/:param_name', requireAuth, OzgecmisController.updateOzgecmis);
     ozgecmisRoutes.put('/:ozgecmis_id', requireAuth, OzgecmisController.updateOzgecmisAll);
     ozgecmisRoutes.get('/:ozgecmis_id', requireAuth, OzgecmisController.getOzgecmis);
+    ozgecmisRoutes.get('/', OzgecmisController.getOzgecmisler);
     // ozgecmisRoutes.get('/avatar', requireAuth, OzgecmisController.getAvatar);
     // ozgecmisRoutes.post('/', OzgecmisController.createBasvuru);
     // ozgecmisRoutes.delete('/', OzgecmisController.deleteBasvuru);
