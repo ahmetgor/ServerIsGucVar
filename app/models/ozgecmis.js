@@ -185,7 +185,10 @@ var OzgecmisSchema = new mongoose.Schema({
 
     enabled: {
         type: Boolean
-    }
+    },
+    okundu:[mongoose.Schema.Types.ObjectId],
+    begen:[mongoose.Schema.Types.ObjectId],
+    cokbegen:[mongoose.Schema.Types.ObjectId]
 
 }, {
     timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,

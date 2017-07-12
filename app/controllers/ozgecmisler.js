@@ -1,6 +1,7 @@
 var Ozgecmis = require('../models/ozgecmis');
 var AvatarsIO = require('avatars.io');
 var Basvuru = require('../models/basvuru');
+var Begen = require('../models/begen');
 
 exports.getOzgecmis = function(req, res, next){
       Ozgecmis.findOne({ _id: req.params.ozgecmis_id }, function(err, kayit) {
@@ -45,6 +46,20 @@ exports.getOzgecmisler = function(req, res, next){
 
   var st = new RegExp(req.query.term, "i")
   var kayit = JSON.parse(req.query.kayit);
+
+  switch(kayit.segment) {
+    case 'okundu':
+    var segment = {okundu: kayit.userId};
+    break;
+    case 'begen':
+    var segment = {begen: kayit.userId};
+    break;
+    case 'cokbegen':
+    var segment = {cokbegen: kayit.userId};
+    break;
+    default:
+    var segment = {};
+  }
 
   if (kayit.tecrube!=undefined && kayit.tecrube.length > 0) {
     var tecrube = {tecrube:{ $in :kayit.tecrube }};
@@ -91,45 +106,10 @@ exports.getOzgecmisler = function(req, res, next){
         // console.log(JSON.stringify(kayitlar));
         res.json(kayitlar);
 
-    }).populate({ path: 'ozgecmis', match: {$and : [ {isim: {$ne: null}},
-          { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {adres: st} ] }
+    }).populate({ path: 'ozgecmis', match: {$and : [ segment,
+          { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st} ] }
         ]}})
+      // .populate('begen')
       .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
 }
-
-
-exports.getBasvurular = function(req, res, next){
-  // var st = new RegExp(req.query.term, "i")
-  console.log(req.query.skip+'   '+req.query.limit);
-    Basvuru.find(
-      { ozgecmis: req.query.ozgecmis
-    // $and : [ query, {owner: owner},
-    //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
-    // ]
-}
-,function(err, kayitlar) {
-
-      if (err){
-          res.send(err);
-      }
-      res.json(kayitlar);
-  } )
-.populate({ path: 'basvuru' }
-// .exec(
-).sort({guncellemeTarih: -1}).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
-}
-
-// exports.getAvatar = function(req, res, next){
-//
-// AvatarsIO.appId = '123456';
-// AvatarsIO.accessToken = '123456';
-// AvatarsIO.upload('1387fe463bd02cf86c9a1bac0add69e9.jpg', function(err, url){
-// 	// url is a URL of just uploaded avatar
-//   console.log(url);
-//   if (err){
-//       res.send(err);
-//   }
-//   res.send(url);
-// });
-// }
