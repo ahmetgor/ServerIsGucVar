@@ -1,7 +1,7 @@
 var Ozgecmis = require('../models/ozgecmis');
 var AvatarsIO = require('avatars.io');
 var Basvuru = require('../models/basvuru');
-var Begen = require('../models/begen');
+var mongoose = require('mongoose');
 
 exports.getOzgecmis = function(req, res, next){
       Ozgecmis.findOne({ _id: req.params.ozgecmis_id }, function(err, kayit) {
@@ -46,16 +46,18 @@ exports.getOzgecmisler = function(req, res, next){
 
   var st = new RegExp(req.query.term, "i")
   var kayit = JSON.parse(req.query.kayit);
-
+  var ObjectId = mongoose.Types.ObjectId(kayit.userId);
   switch(kayit.segment) {
     case 'okundu':
-    var segment = {okundu: kayit.userId};
+    var segment = {okundu: ObjectId};
+    console.log("hebe1");
     break;
     case 'begen':
-    var segment = {begen: kayit.userId};
+    var segment = {begen: ObjectId};
+    console.log("hebe");
     break;
     case 'cokbegen':
-    var segment = {cokbegen: kayit.userId};
+    var segment = {cokbegen: ObjectId};
     break;
     default:
     var segment = {};
@@ -88,7 +90,7 @@ exports.getOzgecmisler = function(req, res, next){
   console.log(kayit.basvuruId+'basvuruId');
 
   // console.log(JSON.stringify(order)+'order');
-  console.log(JSON.stringify(kayit.il)+'il');
+  console.log(JSON.stringify(segment)+'segment');
 
     Basvuru.find(
       {
@@ -112,4 +114,16 @@ exports.getOzgecmisler = function(req, res, next){
       // .populate('begen')
       .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
+}
+
+exports.begenOzgecmis = function(req, res, next){
+
+    Ozgecmis.update({ _id: req.params.ozgecmis_id }, param_name, function(err, kayit) {
+
+      if (err){
+          res.send(err);
+      }
+      console.log(JSON.stringify(kayit));
+        res.json(kayit);
+    });
 }
