@@ -59,7 +59,9 @@ module.exports = function(app){
     ozgecmisRoutes.get('/:ozgecmis_id', requireAuth, OzgecmisController.getOzgecmis);
 
     ozgecmisRoutes.get('/', OzgecmisController.getOzgecmisler);
-    ozgecmisRoutes.put('/begen/:ozgecmis_id/', OzgecmisController.begenOzgecmis);
+    ozgecmisRoutes.post('/begen/:ozgecmis_id/', OzgecmisController.begenOzgecmis);
+    ozgecmisRoutes.post('/begenme/:ozgecmis_id/', OzgecmisController.begenmeOzgecmis);
+
     // ozgecmisRoutes.get('/avatar', requireAuth, OzgecmisController.getAvatar);
     // ozgecmisRoutes.post('/', OzgecmisController.createBasvuru);
     // ozgecmisRoutes.delete('/', OzgecmisController.deleteBasvuru);

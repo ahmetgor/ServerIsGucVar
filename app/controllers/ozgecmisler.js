@@ -60,7 +60,7 @@ exports.getOzgecmisler = function(req, res, next){
     var segment = {cokbegen: ObjectId};
     break;
     default:
-    var segment = {};
+    var segment = { okundu: { $ne: ObjectId }, begen: { $ne: ObjectId }, cokbegen: { $ne: ObjectId } };
   }
 
   if (kayit.tecrube!=undefined && kayit.tecrube.length > 0) {
@@ -117,13 +117,52 @@ exports.getOzgecmisler = function(req, res, next){
 }
 
 exports.begenOzgecmis = function(req, res, next){
-
-    Ozgecmis.update({ _id: req.params.ozgecmis_id }, param_name, function(err, kayit) {
+  var begenObject = req.body.userId;
+  // var begenObject = mongoose.Types.ObjectId(req.body.userId);
+  switch(req.body.segment) {
+    case 'okundu':
+    var segment = { $push: { okundu: begenObject } };
+    break;
+    case 'begen':
+    var segment = { $push: { begen: begenObject } };
+    break;
+    case 'cokbegen':
+    var segment = { $push: { cokbegen: begenObject } };
+    break;
+    default:
+    var segment = {};
+  }
+  console.log(JSON.stringify(segment)+"segment");
+    Ozgecmis.update({ _id: req.params.ozgecmis_id }, segment,  function(err, kayit) {
 
       if (err){
           res.send(err);
       }
-      console.log(JSON.stringify(kayit));
+        res.json(kayit);
+    });
+}
+
+exports.begenmeOzgecmis = function(req, res, next){
+  var begenObject = req.body.userId;
+  // var begenObject = mongoose.Types.ObjectId(req.body.userId);
+  switch(req.body.segment) {
+    case 'okundu':
+    var segment = { $pull: { okundu: begenObject } };
+    break;
+    case 'begen':
+    var segment = { $pull: { begen: begenObject } };
+    break;
+    case 'cokbegen':
+    var segment = { $pull: { cokbegen: begenObject } };
+    break;
+    default:
+    var segment = {};
+  }
+    Ozgecmis.update({ _id: req.params.ozgecmis_id }, segment, function(err, kayit) {
+
+      if (err){
+          res.send(err);
+      }
         res.json(kayit);
     });
 }
