@@ -8,7 +8,7 @@ var BasvuruSchema = new mongoose.Schema({
   },
 
   basvuru: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: 'Ilan'
     }
 

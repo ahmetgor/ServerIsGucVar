@@ -1,4 +1,5 @@
 var Ilan = require('../models/ilan');
+var mongoose = require('mongoose');
 
 exports.getIlanlar = function(req, res, next){
 
@@ -23,24 +24,31 @@ exports.getIlanlar = function(req, res, next){
     var egitim = {};
   }
 
-  var firma = new RegExp(kayit.firma, "i")
-  var olusturan = new RegExp(kayit.olusturan, "i")
+  if (kayit.firma)
+  var firma = {firma: kayit.firma};
+  else var firma = {};
+
+  // var firma = new RegExp(kayit.firma, "i");
+  // var firma = null;
+  var olusturan = new RegExp(kayit.olusturan, "i");
+
   var order = JSON.parse(req.query.orderBy);
-  var il = new RegExp(kayit.il, "i")
+  var il = new RegExp(kayit.il, "i");
   console.log(kayit.tecrube+'tecrube');
   // console.log(JSON.stringify(order)+'order');
   console.log(JSON.stringify(kayit.il)+'il');
 
     Ilan.find(
       {
-    $and : [ {firma: firma}, tecrube, egitim, {il: il}, {olusturan: olusturan},
-      { $or: [{baslik: st}, {aciklama: st}, {firma: st}, {olusturan: st} ] }
+    $and : [ firma, tecrube, egitim, {il: il}, {olusturan: olusturan},
+      { $or: [{baslik: st}, {aciklama: st}, {firma: st} ] }
     ]
 }
 ,function(err, kayitlar) {
 
         if (err)  {res.send(err);
         }
+
         res.json(kayitlar);
 
     }).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
