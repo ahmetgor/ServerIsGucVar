@@ -30,8 +30,8 @@ exports.getIlanlar = function(req, res, next){
 
   // var firma = new RegExp(kayit.firma, "i");
   // var firma = null;
-  var olusturan = new RegExp(kayit.olusturan, "i");
-
+  var olusturan = kayit.olusturan ? new RegExp("^"+kayit.olusturan+"$", "i") : new RegExp(kayit.olusturan)
+  // var olusturan = kayit.olusturan
   var order = JSON.parse(req.query.orderBy);
   var il = new RegExp(kayit.il, "i");
   console.log(kayit.tecrube+'tecrube');

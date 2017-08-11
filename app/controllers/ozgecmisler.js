@@ -84,17 +84,21 @@ exports.getOzgecmisler = function(req, res, next){
     console.log('NOK');
     var egitim = {};
   }
-
   // var firma = new RegExp(kayit.firma, "i")
-  var firma = new RegExp(kayit.firma, "i")
-  var olusturan = new RegExp(kayit.olusturan, "i");
+  var firma = kayit.firma ? new RegExp("^"+kayit.firma+"$", "i") : new RegExp(kayit.firma);
+  var olusturan = kayit.olusturan ? new RegExp("^"+kayit.olusturan+"$", "i") : new RegExp(kayit.olusturan);
   var order = JSON.parse(req.query.orderBy);
-  var il = new RegExp(kayit.il, "i");
+  var sehir = kayit.sehir ? new RegExp("^"+kayit.sehir+"$", "i") : new RegExp(kayit.sehir);
+  var unvan = new RegExp(kayit.unvan, "i");
+  var isim = new RegExp(kayit.isim, "i");
+  var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp(kayit.dil);
+
+  var yilTecrube = kayit.yilTecrube ? kayit.yilTecrube : -1;
+  var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -100000;
   var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
   console.log(kayit.olusturan+'olusturan');
   console.log(kayit.firma+'firma');
-
   // console.log(JSON.stringify(order)+'order');
   console.log(JSON.stringify(segment)+'segment');
 
@@ -103,15 +107,14 @@ exports.getOzgecmisler = function(req, res, next){
   $and : [ {firma: firma}, {olusturan: olusturan}]
 }, '_id'
 ,function(err, kayitlar) {
-
       // if (err)  {res.send(err);
       // }
     for (var key in kayitlar) {
     console.log(key, kayitlar[key]._id);
     ilanlar.push(kayitlar[key]._id);
     }
-    console.log(basvuruId+" basvuruid");
-    console.log(kayit.basvuruId+" kayit.basvuruid");
+    // console.log(basvuruId+" basvuruid");
+    // console.log(kayit.basvuruId+" kayit.basvuruid");
     // console.log(JSON.stringify(ilanlar)+"ilanlarinner");
 
     Basvuru.find(
@@ -122,7 +125,7 @@ exports.getOzgecmisler = function(req, res, next){
     ]
 }
 ,function(err, kayitlar) {
-  console.log(JSON.stringify(kayitlar)+"kayitlar");
+  // console.log(JSON.stringify(kayitlar)+"kayitlar");
         if (err)  {res.send(err);
         }
             kayitlar = kayitlar.filter((item) => {
@@ -132,13 +135,14 @@ exports.getOzgecmisler = function(req, res, next){
         res.json(kayitlar);
 
     })
-    .populate({ path: 'ozgecmis', match: {$and : [ segment,
+    // TODO: egitim, tecrübe, egitimdurum, yaş, tecrübe
+    .populate({ path: 'ozgecmis', match: { $and : [ segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
+              {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
           { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st} ] }
         ]}})
       // .populate('begen')
       .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
-
   });
 
 }
@@ -159,7 +163,7 @@ exports.begenOzgecmis = function(req, res, next){
     default:
     var segment = {};
   }
-  console.log(JSON.stringify(segment)+"segment");
+  // console.log(JSON.stringify(segment)+"segment");
     Ozgecmis.update({ _id: req.params.ozgecmis_id }, segment,  function(err, kayit) {
 
       if (err){

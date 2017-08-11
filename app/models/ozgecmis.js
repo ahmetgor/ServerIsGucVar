@@ -37,6 +37,11 @@ var OzgecmisSchema = new mongoose.Schema({
         //required: true
     },
 
+    sehir: {
+        type: String
+        //required: true
+    },
+
     tc: {
         type: String,
         enum: ['Evet', 'Hayır']
