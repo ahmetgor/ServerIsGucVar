@@ -1,10 +1,12 @@
 var AuthenticationController = require('./controllers/authentication'),
+    FirmaController = require('./controllers/firmaAuth'),
     TodoController = require('./controllers/ilanlar'),
     AktiviteController = require('./controllers/aktiviteler'),
     UsersController = require('./controllers/users'),
     OzgecmisController = require('./controllers/ozgecmisler'),
     HashController = require('./controllers/hash'),
     AvatarController = require('./controllers/cloudinary'),
+
     express = require('express'),
     passportService = require('../config/passport'),
     passport = require('passport');
@@ -20,6 +22,7 @@ module.exports = function(app){
         userRoutes = express.Router();
         aktiviteRoutes = express.Router();
         ozgecmisRoutes = express.Router();
+        firmaRoutes = express.Router();
 
     // Auth Routes
     apiRoutes.use('/auth', authRoutes);
@@ -28,6 +31,14 @@ module.exports = function(app){
     authRoutes.post('/login', requireLogin, AuthenticationController.login);
     // authRoutes.get('/users', requireAuth, AuthenticationController.users);
     authRoutes.get('/protected', requireAuth, function(req, res){
+        res.send({ content: 'Success'});
+    });
+
+    apiRoutes.use('/firmaauth', firmaRoutes);
+    firmaRoutes.post('/register', FirmaController.firmaRegister);
+    firmaRoutes.post('/login', requireLogin, FirmaController.firmaLogin);
+    // authRoutes.get('/users', requireAuth, AuthenticationController.users);
+    firmaRoutes.get('/protected', requireAuth, function(req, res){
         res.send({ content: 'Success'});
     });
 
@@ -48,6 +59,7 @@ module.exports = function(app){
     apiRoutes.use('/ilanlar', todoRoutes);
     todoRoutes.get('/', TodoController.getIlanlar);
     todoRoutes.get('/:kayit_id', TodoController.getIlan);
+    todoRoutes.put('/:ilan_id', TodoController.updateIlan);
     // todoRoutes.post('/', requireAuth, /* AuthenticationController.roleAuthorization(['creator', 'editor', 'reader']), */ TodoController.createKayit);
     // todoRoutes.delete('/:kayit_id', requireAuth,TodoController.deleteKayit);
     // todoRoutes.put('/:kayit_id', requireAuth TodoController.updateKayit);

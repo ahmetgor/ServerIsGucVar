@@ -23,6 +23,13 @@ var UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ozgecmis'
   },
+  firmaObj: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Firma'
+  },
+  firma: {
+    type: String
+    },
   },
 
     {
@@ -86,6 +93,22 @@ UserSchema.pre('update', function(next){
 });
 
 UserSchema.methods.comparePassword = function(passwordAttempt, cb){
+  bcrypt.genSalt(5, function(err, salt){
+
+      if(err){
+          return next(err);
+      }
+      console.log(this.password+'    qweqweqweqwe     '+passwordAttempt);
+
+      bcrypt.hash(passwordAttempt, salt, null, function(err, hash){
+
+          if(err){
+              return next(err);
+          }
+          console.log(hash+'    asdasdasdasdasdasd');
+      });
+  });
+
 
     bcrypt.compare(passwordAttempt, this.password, function(err, isMatch){
 

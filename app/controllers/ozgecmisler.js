@@ -138,7 +138,7 @@ exports.getOzgecmisler = function(req, res, next){
     // TODO: egitim, tecrübe, egitimdurum, yaş, tecrübe
     .populate({ path: 'ozgecmis', match: { $and : [ segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
               {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
-          { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st} ] }
+          { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st}, {enabled: true} ] }
         ]}})
       // .populate('begen')
       .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))

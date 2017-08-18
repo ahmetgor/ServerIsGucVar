@@ -29,7 +29,7 @@ var IlanSchema = new mongoose.Schema({
 
     tip: {
         type: String,
-        enum: ['Yarı Z.', 'Tam Z.', 'Aylık'],
+        enum: ['Yarı Z.', 'Tam Z.', 'Proje Bazlı', 'Günlük', 'Staj'],
         required: true
     },
 
@@ -65,8 +65,13 @@ var IlanSchema = new mongoose.Schema({
     olusturan: {
       type: String
     },
+
     guncelleyen: {
       type: String
+    },
+
+    enabled: {
+        type: Boolean
     }
 
 }, {
