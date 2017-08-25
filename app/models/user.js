@@ -23,17 +23,10 @@ var UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ozgecmis'
   },
-  firmaObj: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Firma'
   },
-  firma: {
-    type: String
-    },
-  },
-
     {
-        timestamps: true
+      timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,
+      collection: 'user'
     });
 
 UserSchema.pre('save', function(next){

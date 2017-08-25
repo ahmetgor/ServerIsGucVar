@@ -14,14 +14,13 @@ function setUserInfo(request){
         _id: request._id,
         email: request.email,
         ozgecmis: request.ozgecmis
-        // role: request.role,
-        // firma: request.firma
     };
 }
 
 exports.login = function(req, res, next){
 
     var userInfo = setUserInfo(req.user);
+    console.log(JSON.stringify(userInfo)+"userinfo");
 
     res.status(200).json({
         token: 'JWT ' + generateToken(userInfo),
@@ -33,7 +32,6 @@ exports.register = function(req, res, next){
 
     var email = req.body.email;
     var password = req.body.password;
-    var enabled = true;
 
     if(!email){
         return res.status(422).send({error: 'Email girmediniz!'});
@@ -57,7 +55,7 @@ exports.register = function(req, res, next){
         var user = new User({
             email: email,
             password: password,
-            enabled: enabled
+            enabled: true
         });
 
         var ozgecmis = new Ozgecmis({

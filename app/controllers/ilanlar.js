@@ -48,11 +48,11 @@ exports.getIlanlar = function(req, res, next){
 
         if (err)  {res.send(err);
         }
-
         res.json(kayitlar);
-
     }).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
+
+
 }
 
   exports.getIlan = function(req, res, next){

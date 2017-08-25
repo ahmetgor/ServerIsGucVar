@@ -6,7 +6,6 @@ var FirmaSchema = new mongoose.Schema({
     email: {
         type: String,
         // lowercase: true,
-        unique: true,
         required: true
     },
     password: {
@@ -20,10 +19,8 @@ var FirmaSchema = new mongoose.Schema({
   resetPasswordExpires: Date,
   activateToken: String,
   firma: {
-    type: String
-    },
-  firmaPass: {
-    type: String
+    type: String,
+    unique: true
     },
   },
   {
@@ -58,24 +55,24 @@ if(firmaUser.isModified('password')) {
         });
     });
   }
-  if(firmaUser.isModified('firmaPass')) {
-      bcrypt.genSalt(SALT_FACTOR, function(err, salt){
-
-          if(err){
-              return next(err);
-          }
-
-          bcrypt.hash(firmaUser.firmaPass, salt, null, function(err, hash){
-
-              if(err){
-                  return next(err);
-              }
-
-              firmaUser.password = hash;
-              next();
-          });
-      });
-    }
+  // if(firmaUser.isModified('firmaPass')) {
+  //     bcrypt.genSalt(SALT_FACTOR, function(err, salt){
+  //
+  //         if(err){
+  //             return next(err);
+  //         }
+  //
+  //         bcrypt.hash(firmaUser.firmaPass, salt, null, function(err, hash){
+  //
+  //             if(err){
+  //                 return next(err);
+  //             }
+  //
+  //             firmaUser.password = hash;
+  //             next();
+  //         });
+  //     });
+  //   }
 });
 
 FirmaSchema.pre('update', function(next){
@@ -105,24 +102,24 @@ if(firmaUser.isModified('password')) {
         });
     });
   }
-  if(firmaUser.isModified('firmaPass')) {
-      bcrypt.genSalt(SALT_FACTOR, function(err, salt){
-
-          if(err){
-              return next(err);
-          }
-
-          bcrypt.hash(firmaUser.firmaPass, salt, null, function(err, hash){
-
-              if(err){
-                  return next(err);
-              }
-
-              firmaUser.password = hash;
-              next();
-          });
-      });
-    }
+  // if(firmaUser.isModified('firmaPass')) {
+  //     bcrypt.genSalt(SALT_FACTOR, function(err, salt){
+  //
+  //         if(err){
+  //             return next(err);
+  //         }
+  //
+  //         bcrypt.hash(firmaUser.firmaPass, salt, null, function(err, hash){
+  //
+  //             if(err){
+  //                 return next(err);
+  //             }
+  //
+  //             firmaUser.password = hash;
+  //             next();
+  //         });
+  //     });
+  //   }
 });
 
 FirmaSchema.methods.comparePassword = function(passwordAttempt, cb){

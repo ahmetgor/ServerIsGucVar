@@ -11,8 +11,12 @@ var AuthenticationController = require('./controllers/authentication'),
     passportService = require('../config/passport'),
     passport = require('passport');
 
-var requireAuth = passport.authenticate('jwt', {session: false}),
-    requireLogin = passport.authenticate('local', {session: false});
+var requireAuth = passport.authenticate('jwt-user', {session: false}),
+    requireLogin = passport.authenticate('user-login', {session: false}),
+    requireFirmaLogin = passport.authenticate('firma-login', {session:false});
+    requireUserFirmaLogin = passport.authenticate('userfirma-login', {session:false});
+    requireUserFirmaAuth = passport.authenticate('jwt-firmauser', {session:false});
+
 
 module.exports = function(app){
 
@@ -35,12 +39,16 @@ module.exports = function(app){
     });
 
     apiRoutes.use('/firmaauth', firmaRoutes);
-    firmaRoutes.post('/register', FirmaController.firmaRegister);
-    firmaRoutes.post('/login', requireLogin, FirmaController.firmaLogin);
+    firmaRoutes.post('/register/firma', FirmaController.firmaRegister);
+    firmaRoutes.post('/register/user', requireFirmaLogin, FirmaController.userRegister);
+    firmaRoutes.post('/login', requireUserFirmaLogin,  FirmaController.firmaLogin);
     // authRoutes.get('/users', requireAuth, AuthenticationController.users);
-    firmaRoutes.get('/protected', requireAuth, function(req, res){
+    firmaRoutes.get('/protected', requireUserFirmaAuth, function(req, res){
         res.send({ content: 'Success'});
     });
+    // app.get('/loginfail', function(req, res){
+    //     return res.status(422).send({error: 'Firma bilgileri hatalı!'});
+    // });
 
     // apiRoutes.get('/hash', Hash Controller.getHash );
     apiRoutes.post('/tools/avatar', requireAuth, AvatarController.postAvatar);

@@ -1,5 +1,6 @@
 var jwt = require('jsonwebtoken');
 var Firma = require('../models/firma');
+var FirmaUser = require('../models/firmauser');
 var authConfig = require('../../config/auth');
 
 function generateToken(user){
@@ -9,19 +10,19 @@ function generateToken(user){
 }
 
 function setUserInfo(request){
-    return {
-        _id: request._id,
-        email: request.email,
-        // role: request.role,
-        firma: request.firma
-        // firmaObj: request.firmaObj
-    };
+  return {
+      _id: request._id,
+      email: request.email,
+      role: request.role,
+      firma: request.firma,
+      firmaObj: request.firmaObj
+  };
 }
 
 exports.firmaLogin = function(req, res, next){
 
     var userInfo = setUserInfo(req.user);
-
+    console.log(JSON.stringify(req.user)+"req user")
     res.status(200).json({
         token: 'JWT ' + generateToken(userInfo),
         user: userInfo
@@ -30,26 +31,102 @@ exports.firmaLogin = function(req, res, next){
 
 exports.firmaRegister = function(req, res, next){
 
-    var email = req.body.email;
+    var email = new RegExp("^"+req.body.email+"$", "i");
     var password = req.body.password;
-    var firma = req.body.firma;
+    var firma = new RegExp("^"+req.body.firma+"$", "i");;
     var firmaPass = req.body.firmaPass;
     // var enabled = true;
-
-    if(!email){
-        return res.status(422).send({error: 'Email girmediniz!'});
-    }
-    if(!password){
-        return res.status(422).send({error: 'Şifre girmediniz!'});
-    }
-    if(!firma){
-        return res.status(422).send({error: 'Firma girmediniz!'});
-    }
-    if(!firmaPass){
-        return res.status(422).send({error: 'Firma şifresi girmediniz!'});
-    }
+    // if(!email){
+    //     return res.status(422).send({error: 'Email girmediniz!'});}
+    // if(!password){
+    //     return res.status(422).send({error: 'Şifre girmediniz!'});}
+    // if(!firma){
+    //     return res.status(422).send({error: 'Firma girmediniz!'});}
+    // if(!firmaPass){
+    //     return res.status(422).send({error: 'Firma şifresi girmediniz!'});}
 // {email: {'$regex': email, $options:'i'}}
-    Firma.findOne({email: email}, function(err, existingUser){
+    // User.findOne({email: email}, function(err, existingUser){
+    //
+    //     if(err){
+    //         return next(err);
+    //     }
+    //
+    //     if(existingUser){
+    //         console.log('Bu email kullanımda');
+    //         return res.status(422).send({error: 'Bu email kullanımda!'});
+    //     }
+
+        Firma.findOne({firma: firma}, function(err, existingFirma){
+
+            if(err){
+                return next(err);
+            }
+
+            if(existingFirma){
+                console.log('Bu firma kullanımda kullanımda');
+                return res.status(422).send({error: 'Bu firma kullanımda!'});
+            }
+
+            FirmaUser.findOne({email: email}, function(err, existingFirma){
+
+                if(err){
+                    return next(err);
+                }
+
+                if(existingFirma){
+                    console.log('Bu email kullanımda kullanımda');
+                    return res.status(422).send({error: 'Bu email kullanımda!'});
+                }
+
+        console.log("user yaratılıyor")
+        var firma = new Firma({
+            email: req.body.email,
+            password: password,
+            firma: req.body.firma,
+            // firmaObj: firmaObj,
+            enabled: true
+        });
+
+        var firmauser = new FirmaUser({
+            email: req.body.email,
+            password: password,
+            role: 'Manager',
+            enabled: true
+        });
+
+        firma.save(function(err, firma){
+
+            if(err){
+                return next(err);
+            }
+
+            firmauser.save(function(err, user){
+
+                if(err){
+                    return next(err);
+                }
+                done(err, user);
+            });
+            res.status(201).json({
+              // var userInfo = setUserInfo(user);
+            //     // token: 'JWT ' + generateToken(userInfo),
+            //     // user: userInfo
+            });
+        });
+
+      });
+      });
+}
+
+exports.userRegister = function(req, res, next){
+
+    var email = req.body.email;
+    var password = req.body.password;
+    // var firma = req.body.firma;
+    // var firmaPass = req.body.firmaPass;
+    // var enabled = true;
+// {email: {'$regex': email, $options:'i'}}
+    FirmaUser.findOne({email: new RegExp("^"+req.body.email+"$", "i")}, function(err, existingUser){
 
         if(err){
             return next(err);
@@ -60,15 +137,16 @@ exports.firmaRegister = function(req, res, next){
             return res.status(422).send({error: 'Bu email kullanımda!'});
         }
 
-        var user = new User({
+        var firmauser = new FirmaUser({
             email: email,
             password: password,
-            firma: firma,
-            firmaObj: firmaObj,
+            // firma: firma,
+            // firmaObj: firmaObj,
+            role: 'Employer',
             enabled: true
         });
 
-        firma.save(function(err, user){
+        firmauser.save(function(err, user){
 
             if(err){
                 return next(err);
