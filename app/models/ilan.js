@@ -12,9 +12,9 @@ var IlanSchema = new mongoose.Schema({
         required: true
     },
 
-    resim: {
-        type: String,
-        required: true
+    firma: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Firma'
     },
 
     aciklama: {
@@ -51,7 +51,7 @@ var IlanSchema = new mongoose.Schema({
 
     askerlik: {
       type: String,
-      enum: ['Yapıldı & Muaf', 'Yapılmadı & Tecilli'],
+      enum: ['Yapıldı/Muaf', 'Yapılmadı/Tecilli'],
     },
 
     goruntulenme: {

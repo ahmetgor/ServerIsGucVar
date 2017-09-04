@@ -104,7 +104,8 @@ var firmaUserLogin = new LocalStrategy(localOptions, function(email, password, d
 
             return done(null, user);
         });
-    });
+    })
+    .populate({ path: 'firmaObj'});
 });
 
 var localFirmaLogin = new LocalStrategy(localFirmaOptions, function(firma, password, done){
@@ -185,7 +186,10 @@ var jwtFirmaLogin = new JwtStrategy(jwtOptions, function(payload, done){
         } else {
             done(null, false);
         }
-    });
+    })
+    .populate({ path: 'firmaObj'
+    // , match: { $and : [ firma, { $or: [ {firma: st} ] }]}
+});
 });
 
 passport.use('jwt-user',jwtLogin);

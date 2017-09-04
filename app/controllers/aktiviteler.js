@@ -97,7 +97,6 @@ exports.createBasvuru = function(req, res, next){
         }
         res.json(kayit);
     });
-
 }
 
 exports.deleteBasvuru = function(req, res, next){

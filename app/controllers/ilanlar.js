@@ -40,8 +40,8 @@ exports.getIlanlar = function(req, res, next){
 
     Ilan.find(
       {
-    $and : [ firma, tecrube, egitim, {il: il}, {olusturan: olusturan}, enabled,
-      { $or: [{baslik: st}, {aciklama: st}, {firma: st} ] }
+    $and : [ tecrube, egitim, {il: il}, {olusturan: olusturan}, enabled,
+      { $or: [{baslik: st}, {aciklama: st} ] }
     ]
 }
 ,function(err, kayitlar) {
@@ -49,7 +49,10 @@ exports.getIlanlar = function(req, res, next){
         if (err)  {res.send(err);
         }
         res.json(kayitlar);
-    }).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
+    })
+    .populate({ path: 'firma', match: { $and : [ firma, { $or: [ {firma: st} ] }]
+    }})
+    .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
 
 
@@ -65,16 +68,34 @@ exports.getIlanlar = function(req, res, next){
           }
           // console.log(kayit._id);
           res.json(kayit);
-      });
+      })
+      .populate({ path: 'firma', match: {}});
     }
 
   exports.updateIlan = function(req, res, next){
-        // console.log(req.body);
-        Ilan.findOneAndUpdate({ _id: req.params.ilan_id }, req.body, {upsert:true}, function(err, kayit) {
+        console.log(req.body);
+        console.log(req.body.id+"body");
+        console.log(req.params.ilan_id+"params");
+
+        Ilan.findOneAndUpdate({ _id: req.params.ilan_id}, req.body, function(err, kayit) {
 
           if (err){
               res.send(err);
           }
+          console.log(JSON.stringify(kayit)+"kayit");
+            res.json(kayit);
+        });
+    }
+
+    exports.createIlan = function(req, res, next){
+      console.log(JSON.stringify(req.body)+'create');
+
+        Ilan.create(req.body, function(err, kayit) {
+
+            if (err){
+              console.log(JSON.stringify(err)+'err');
+                res.send(err);
+            }
             res.json(kayit);
         });
     }

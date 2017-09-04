@@ -12,6 +12,9 @@ var FirmaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    resim: {
+        type: String
+    },
     enabled: {
         type: Boolean
       },

@@ -14,8 +14,8 @@ function setUserInfo(request){
       _id: request._id,
       email: request.email,
       role: request.role,
-      firma: request.firma,
-      firmaObj: request.firmaObj
+      firma: request.firmaObj.firma,
+      resim: request.firmaObj.resim
   };
 }
 
@@ -100,6 +100,7 @@ exports.firmaRegister = function(req, res, next){
                 return next(err);
             }
 
+            firmauser.firma = firma._id;
             firmauser.save(function(err, user){
 
                 if(err){

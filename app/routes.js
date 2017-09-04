@@ -68,6 +68,8 @@ module.exports = function(app){
     todoRoutes.get('/', TodoController.getIlanlar);
     todoRoutes.get('/:kayit_id', TodoController.getIlan);
     todoRoutes.put('/:ilan_id', TodoController.updateIlan);
+    todoRoutes.post('/', TodoController.createIlan);
+
     // todoRoutes.post('/', requireAuth, /* AuthenticationController.roleAuthorization(['creator', 'editor', 'reader']), */ TodoController.createKayit);
     // todoRoutes.delete('/:kayit_id', requireAuth,TodoController.deleteKayit);
     // todoRoutes.put('/:kayit_id', requireAuth TodoController.updateKayit);
