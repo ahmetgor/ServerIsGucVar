@@ -15,7 +15,8 @@ function setUserInfo(request){
       email: request.email,
       role: request.role,
       firma: request.firmaObj.firma,
-      resim: request.firmaObj.resim
+      resim: request.firmaObj.resim,
+      firmaId: request.firmaObj._id
   };
 }
 
@@ -84,14 +85,16 @@ exports.firmaRegister = function(req, res, next){
             password: password,
             firma: req.body.firma,
             // firmaObj: firmaObj,
-            enabled: true
+            enabled: true,
+            resim: req.body.userUrl
         });
 
         var firmauser = new FirmaUser({
             email: req.body.email,
             password: password,
             role: 'Manager',
-            enabled: true
+            enabled: true,
+            resim: req.body.firmaUrl
         });
 
         firma.save(function(err, firma){
@@ -144,7 +147,8 @@ exports.userRegister = function(req, res, next){
             // firma: firma,
             // firmaObj: firmaObj,
             role: 'Employer',
-            enabled: true
+            enabled: true,
+            resim: req.body.resim
         });
 
         firmauser.save(function(err, user){

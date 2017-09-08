@@ -50,6 +50,7 @@ exports.getOzgecmisler = function(req, res, next){
   var kayit = JSON.parse(req.query.kayit);
   var ObjectId = mongoose.Types.ObjectId(kayit.userId);
   var ilanlar = [];
+  var ozgecmisler = [];
 
   switch(kayit.segment) {
     case 'okundu':
@@ -85,7 +86,7 @@ exports.getOzgecmisler = function(req, res, next){
     var egitim = {};
   }
   // var firma = new RegExp(kayit.firma, "i")
-  var firma = kayit.firma ? new RegExp("^"+kayit.firma+"$", "i") : new RegExp(kayit.firma);
+  var firma = kayit.firma ? kayit.firma : mongoose.Types.ObjectId(kayit.firma);
   var olusturan = kayit.olusturan ? new RegExp("^"+kayit.olusturan+"$", "i") : new RegExp(kayit.olusturan);
   var order = JSON.parse(req.query.orderBy);
   var sehir = kayit.sehir ? new RegExp("^"+kayit.sehir+"$", "i") : new RegExp(kayit.sehir);
@@ -94,55 +95,99 @@ exports.getOzgecmisler = function(req, res, next){
   var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp(kayit.dil);
 
   var yilTecrube = kayit.yilTecrube ? kayit.yilTecrube : -1;
-  var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -100000;
+  var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -10000000000000;
   var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
-  console.log(kayit.olusturan+'olusturan');
-  console.log(kayit.firma+'firma');
+  console.log(olusturan+'olusturan');
+  console.log(firma+'firma');
+  console.log(dogumTarihi+'dogumTarihi');
   // console.log(JSON.stringify(order)+'order');
   console.log(JSON.stringify(segment)+'segment');
 
   Ilan.find(
     {
-  $and : [ {firma: firma}, {olusturan: olusturan}]
+  $or : [ {firma: firma}, {olusturan: olusturan}]
 }, '_id'
 ,function(err, kayitlar) {
       // if (err)  {res.send(err);
       // }
     for (var key in kayitlar) {
-    console.log(key, kayitlar[key]._id);
+    console.log(key, kayitlar[key]._id + 'ilan');
     ilanlar.push(kayitlar[key]._id);
     }
     // console.log(basvuruId+" basvuruid");
     // console.log(kayit.basvuruId+" kayit.basvuruid");
     // console.log(JSON.stringify(ilanlar)+"ilanlarinner");
-
+    // ["58ecf27d59cf2ca65d4e0871", "59089a0a4be8d6e2c51b7e22", "59089a234be8d6e2c51b7e23"]
     Basvuru.find(
       {
-    $or : [  {basvuru: { $in : ilanlar}}
-      // ["58ecf27d59cf2ca65d4e0871","59089a0a4be8d6e2c51b7e22","59089a234be8d6e2c51b7e23","58ecf27d59cf2ca65d4e0873","58ecf27d59cf2ca65d4e0872"]}}
-      // { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {adres: st} ] }
+    $and : [  {basvuru: { $in : ilanlar}}
     ]
-}
+}, 'ozgecmis'
+// [ {
+//       $lookup:
+//         {
+//           from: "ozgecmis",
+//           localField: "ozgecmis",
+//           foreignField: "_id",
+//           as: "ozgecmis"
+//         }
+//    },
+//    { $match: {basvuru: { $in : ilanlar}} },
+//    { $group: { _id: "$ozgecmis" } },
+//    { $sort: {_id: -1} },
+//    { $limit: parseInt(req.query.limit) },
+//    { $skip: parseInt(req.query.skip)*parseInt(req.query.limit) }
+// ]
 ,function(err, kayitlar) {
   // console.log(JSON.stringify(kayitlar)+"kayitlar");
         if (err)  {res.send(err);
         }
-            kayitlar = kayitlar.filter((item) => {
-              return (item.ozgecmis != null);
-            })
+
+        for (var key in kayitlar) {
+        console.log(key, kayitlar[key].ozgecmis + '   ozgecmis');
+        ozgecmisler.push(kayitlar[key].ozgecmis);
+      }
+
+      Ozgecmis.find(
+        {
+        $and : [ {_id: { $in : ozgecmisler}}, segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
+                  {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
+              { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st}, {enabled: true} ] }
+            ]
+     },
+     function(err, kayitlar) {
+             // console.log(JSON.stringify(kayitlar)+"kayitlar");
+             if (err)  { res.send(err);
+             }
+                 // kayitlar = kayitlar.filter((item) => {
+                 //   return (item.ozgecmis != null);
+                 // })
+            //  console.log(kayitlar);
+             res.json(kayitlar);
         // console.log(JSON.stringify(kayitlar));
-        res.json(kayitlar);
+        // res.json(kayitlar);
 
     })
-    // TODO: egitim, tecrübe, egitimdurum, yaş, tecrübe
-    .populate({ path: 'ozgecmis', match: { $and : [ segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
-              {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
-          { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st}, {enabled: true} ] }
-        ]}})
-      // .populate('begen')
       .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
+    // TODO: egitim, tecrübe, egitimdurum, yaş, tecrübe
+    // .populate({ path: 'ozgecmis', match: { $and : [ segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
+    //           {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
+    //       { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st}, {enabled: true} ] }
+    //     ]}})
+    //   .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
+    //   .sort({_id: -1})
+    //   .aggregate(
+    // [
+    //     { "$group": { "_id": "$ozgecmis" } }
+    // ],
+    // function(err,results) {
+    // });
+      // .exec(
+
+
+          });
   });
 
 }
@@ -169,6 +214,7 @@ exports.begenOzgecmis = function(req, res, next){
       if (err){
           res.send(err);
       }
+       console.log(kayit);
         res.json(kayit);
     });
 }

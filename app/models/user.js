@@ -25,9 +25,8 @@ var UserSchema = new mongoose.Schema({
   },
   },
     {
-      timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,
-      collection: 'user'
-    });
+      timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' }
+  });
 
 UserSchema.pre('save', function(next){
 

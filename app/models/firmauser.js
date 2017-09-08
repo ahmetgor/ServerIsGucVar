@@ -16,6 +16,10 @@ var FirmaUserSchema = new mongoose.Schema({
     enabled: {
         type: Boolean
       },
+      resim: {
+        type: String
+        ////required: true
+      },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   activateToken: String,
