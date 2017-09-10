@@ -1,6 +1,7 @@
 var cloudinary = require('cloudinary');
 var async = require('async');
 var User = require('../models/user');
+var FirmaUser = require('../models/firmauser');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 
@@ -19,6 +20,26 @@ cloudinary.v2.uploader.upload(req.body.resim, {timeout:120000}, function(err,res
 
   res.json(result);
 });
+}
+
+exports.actUser = function(req, res, next){
+  FirmaUser.findOne({activateToken: req.params.token},
+  function(err, user) {
+    if (!user) {
+      return res.status(422).send({error: 'Aktivasyon no bulunamadı.'});
+    }
+
+    user.activateToken = undefined;
+    user.enabled = true;
+
+    user.save(function(err) {
+      if (err){
+          // res.send(err);
+      return next(err);
+      }
+      res.send("Aktivasyon başarılı");
+    });
+  });
 }
 
 exports.postForgot = function(req, res, next) {

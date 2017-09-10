@@ -54,6 +54,9 @@ module.exports = function(app){
     apiRoutes.post('/tools/avatar', AvatarController.postAvatar);
     apiRoutes.post('/tools/forgot', AvatarController.postForgot);
     apiRoutes.post('/tools/reset', AvatarController.resetPass);
+    apiRoutes.get('/tools/activate/:token', AvatarController.actUser);
+    // apiRoutes.post('/tools/firma', AvatarController.actFirma);
+
 
 
     // apiRoutes.use('/users', userRoutes);

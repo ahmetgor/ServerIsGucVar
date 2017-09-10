@@ -2,6 +2,8 @@ var jwt = require('jsonwebtoken');
 var Firma = require('../models/firma');
 var FirmaUser = require('../models/firmauser');
 var authConfig = require('../../config/auth');
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
 
 function generateToken(user){
     return jwt.sign(user, authConfig.secret, {
@@ -93,7 +95,7 @@ exports.firmaRegister = function(req, res, next){
             email: req.body.email,
             password: password,
             role: 'Manager',
-            enabled: true,
+            enabled: false,
             resim: req.body.firmaUrl
         });
 
@@ -147,21 +149,53 @@ exports.userRegister = function(req, res, next){
             // firma: firma,
             // firmaObj: firmaObj,
             role: 'Employer',
-            enabled: true,
+            enabled: false,
             resim: req.body.resim
         });
+
+        crypto.randomBytes(20, function(err, buf) {
+          var token = buf.toString('hex');
+          firmauser.activateToken = token;
 
         firmauser.save(function(err, user){
 
             if(err){
                 return next(err);
             }
+
+            var smtpTransport = nodemailer.createTransport( {
+              service: 'Gmail',
+              auth: {
+                user: 'agor.yazilim@gmail.com',
+                pass: 'musamba01'
+              }
+            });
+            var mailOptions = {
+              to: user.email,
+              from: 'agor.yazilim@gmail.com',
+              subject: 'İşGüçVar Hesap Aktivasyon',
+              text: 'Merhaba,\n\n' +
+                'İşgüçvar hesabı oluşturdunuz. Hesabınızın aktiflenmesi için lütfen aşağıdaki linke tıklayın. \n\n' +
+                'http://' + req.headers.host + '/tools/activate/' + token + '\n\n' +
+                'Görüşmek üzere :) \n'+
+                'İşGüçVar Ekibi \n'
+            };
+            smtpTransport.sendMail(mailOptions, function(err) {
+
+              if (err){
+                  res.send(err);
+              }
+              // res.send('success');
+
+            });
             // var userInfo = setUserInfo(user);
             res.status(201).json({
                 // token: 'JWT ' + generateToken(userInfo),
                 // user: userInfo
             });
         });
+      });
+
       });
 }
 
