@@ -85,6 +85,14 @@ exports.getOzgecmisler = function(req, res, next){
     console.log('NOK');
     var egitim = {};
   }
+  // if (kayit.egitimdurum!=undefined && kayit.egitimdurum.length > 0) {
+  //   var egitimdurum = {egitimdurum:{ $in :kayit.egitimdurum }};
+  //   console.log('OK');
+  // }
+  // else {
+  //   console.log('NOK');
+  //   var egitimdurum = {};
+  // }
   // var firma = new RegExp(kayit.firma, "i")
   var firma = kayit.firma ? kayit.firma : mongoose.Types.ObjectId(kayit.firma);
   var olusturan = kayit.olusturan ? new RegExp("^"+kayit.olusturan+"$", "i") : new RegExp(kayit.olusturan);
@@ -92,18 +100,18 @@ exports.getOzgecmisler = function(req, res, next){
   var sehir = kayit.sehir ? new RegExp("^"+kayit.sehir+"$", "i") : new RegExp(kayit.sehir);
   var unvan = new RegExp(kayit.unvan, "i");
   var isim = new RegExp(kayit.isim, "i");
-  var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp(kayit.dil);
+  var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp("");
   var bilgisayar = kayit.bilgisayar ? new RegExp(kayit.bilgisayar, "i") : new RegExp(kayit.bilgisayar);
-  // var egitimdurum = kayit.egitimdurum ? new RegExp(kayit.egitimdurum, "i") : new RegExp(kayit.egitimdurum);
 
   var yilTecrube = kayit.yilTecrube ? kayit.yilTecrube : -1;
+  var egitimdurum = kayit.egitimdurum ? kayit.egitimdurum : -1;
   var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -10000000000000;
   var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
   console.log(olusturan+'olusturan');
   console.log(dil+'dil');
-  console.log(dogumTarihi+'dogumTarihi');
-  // console.log(JSON.stringify(order)+'order');
+  console.log(egitimdurum+'egitimdurum');
+  console.log(bilgisayar+'bilgisayar');
   console.log(JSON.stringify(segment)+'segment');
 
   Ilan.find(
@@ -157,7 +165,8 @@ exports.getOzgecmisler = function(req, res, next){
                   {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }},
                   { dogumTarihi: { $gte: dogumTarihi }}, {enabled: true},
                   {bilgisayar: bilgisayar},
-              { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st} ] }
+                  // { egitimdurum: { $gte: egitimdurum }},
+              { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: st}  ] }
             ]
      },
      function(err, kayitlar) {
