@@ -17,7 +17,8 @@ function setUserInfo(request){
       email: request.email,
       role: request.role,
       firma: request.firmaObj.firma,
-      resim: request.firmaObj.resim,
+      resim: request.resim,
+      firmaresim: request.firmaObj.resim,
       firmaId: request.firmaObj._id
   };
 }

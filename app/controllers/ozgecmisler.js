@@ -93,13 +93,15 @@ exports.getOzgecmisler = function(req, res, next){
   var unvan = new RegExp(kayit.unvan, "i");
   var isim = new RegExp(kayit.isim, "i");
   var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp(kayit.dil);
+  var bilgisayar = kayit.bilgisayar ? new RegExp(kayit.bilgisayar, "i") : new RegExp(kayit.bilgisayar);
+  // var egitimdurum = kayit.egitimdurum ? new RegExp(kayit.egitimdurum, "i") : new RegExp(kayit.egitimdurum);
 
   var yilTecrube = kayit.yilTecrube ? kayit.yilTecrube : -1;
   var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -10000000000000;
   var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
   console.log(olusturan+'olusturan');
-  console.log(firma+'firma');
+  console.log(dil+'dil');
   console.log(dogumTarihi+'dogumTarihi');
   // console.log(JSON.stringify(order)+'order');
   console.log(JSON.stringify(segment)+'segment');
@@ -152,8 +154,10 @@ exports.getOzgecmisler = function(req, res, next){
       Ozgecmis.find(
         {
         $and : [ {_id: { $in : ozgecmisler}}, segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
-                  {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
-              { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st}, {enabled: true} ] }
+                  {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }},
+                  { dogumTarihi: { $gte: dogumTarihi }}, {enabled: true},
+                  {bilgisayar: bilgisayar},
+              { $or: [{isim: st}, {unvan: st}, {egitimdurum: st}, {sehir: st} ] }
             ]
      },
      function(err, kayitlar) {

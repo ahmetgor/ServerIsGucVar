@@ -22,7 +22,7 @@ exports.getIlanlar = function(req, res, next){
 
   if (kayit.firma)
   var firma = {firma: kayit.firma};
-  else var firma = {};
+  else var firma = {firma: new RegExp("", "i")};
 
   // var firma = new RegExp(kayit.firma, "i");
   // var firma = null;
@@ -40,17 +40,21 @@ exports.getIlanlar = function(req, res, next){
 
     Ilan.find(
       {
-    $and : [ tecrube, egitim, {il: il}, {olusturan: olusturan}, enabled,
-      { $or: [{baslik: st}, {aciklama: st} ] }
-    ]
+    $and : [ tecrube, egitim, {il: il}, {olusturan: olusturan}, enabled    ]
 }
 ,function(err, kayitlar) {
 
         if (err)  {res.send(err);
         }
+        console.log(req.query.term+"st");
+        console.log(kayitlar);
+        kayitlar = kayitlar.filter((ilan) => {
+          console.log(ilan.firma.firma);
+                return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st);
+            });
         res.json(kayitlar);
     })
-    .populate({ path: 'firma', match: { $and : [ firma, { $or: [ {firma: st} ] }]
+    .populate({ path: 'firma', match: { $or: [ firma]
     }})
     .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
       .sort({_id: -1});
