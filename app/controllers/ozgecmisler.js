@@ -101,18 +101,28 @@ exports.getOzgecmisler = function(req, res, next){
   var unvan = new RegExp(kayit.unvan, "i");
   var isim = new RegExp(kayit.isim, "i");
   var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp("");
-  var bilgisayar = kayit.bilgisayar ? new RegExp(kayit.bilgisayar, "i") : new RegExp(kayit.bilgisayar);
+  // var bilgisayar = kayit.bilgisayar ? new RegExp(kayit.bilgisayar, "i") : new RegExp(kayit.bilgisayar);
 
+if (kayit.bilgisayar) {
+  var bilgisayar = kayit.bilgisayar.split(',');
+  for (var key in bilgisayar) {
+  bilgisayar[key] = new RegExp(bilgisayar[key].trim(), "i");
+  console.log(key, bilgisayar[key] + 'bilgisayar');
+  }
+}
+else var bilgisayar = [new RegExp("")];
   var yilTecrube = kayit.yilTecrube ? kayit.yilTecrube : -1;
   var egitimdurum = kayit.egitimdurum ? kayit.egitimdurum : -1;
+  var seviye = kayit.seviye ? kayit.seviye : -1;
   var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -10000000000000;
   var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
   console.log(olusturan+'olusturan');
   console.log(dil+'dil');
   console.log(egitimdurum+'egitimdurum');
-  console.log(bilgisayar+'bilgisayar');
+  console.log(bilgisayar[0]+'bilgisayar');
   console.log(JSON.stringify(segment)+'segment');
+
 
   Ilan.find(
     {
@@ -162,11 +172,11 @@ exports.getOzgecmisler = function(req, res, next){
       Ozgecmis.find(
         {
         $and : [ {_id: { $in : ozgecmisler}}, segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
-                  {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }},
-                  { dogumTarihi: { $gte: dogumTarihi }}, {enabled: true},
-                  {bilgisayar: bilgisayar},
+                  {yabanciDil: { $elemMatch: { dil: dil, seviye: { $gte: seviye }}}},
+                  { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }}, {enabled: true},
+                   { egitimdurum: { $gte: egitimdurum }}, {bilgisayar: { $all: bilgisayar}},
                   // { egitimdurum: { $gte: egitimdurum }},
-              { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: st}  ] }
+              { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: { $all: st}}  ] }
             ]
      },
      function(err, kayitlar) {

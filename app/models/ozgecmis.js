@@ -119,8 +119,7 @@ var OzgecmisSchema = new mongoose.Schema({
         //required: true
       },
       seviye: {
-        type: String,
-        enum: ['Orta', 'İyi', 'Çok İyi', 'Mükemmel']
+        type: Number
         //required: true
       }
     }],
@@ -141,8 +140,7 @@ var OzgecmisSchema = new mongoose.Schema({
     }],
 
     egitimdurum: {
-      type: String,
-      enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora']
+      type: Number
       //required: true
     },
 
@@ -184,7 +182,7 @@ var OzgecmisSchema = new mongoose.Schema({
     },
 
     bilgisayar: {
-        type: String
+        type: [String]
         //required: true
     },
 
