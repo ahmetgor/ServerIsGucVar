@@ -9,8 +9,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var LocalFirmaStrategy = require('passport-local').Strategy;
 
 var localOptions = {
-    usernameField: 'email'
-    // passReqToCallback: true
+    usernameField: 'email',
+    passReqToCallback: true
 };
 
 var localFirmaOptions = {
@@ -63,7 +63,7 @@ var localLogin = new LocalStrategy(localOptions, function(email, password, done)
     });
 });
 
-var firmaUserLogin = new LocalStrategy(localOptions, function(email, password, done){
+var firmaUserLogin = new LocalStrategy(localOptions, function(req, email, password, done){
 
   // console.log(JSON.stringify(req.body)+'req');
     FirmaUser.findOne({
@@ -76,7 +76,7 @@ var firmaUserLogin = new LocalStrategy(localOptions, function(email, password, d
       console.log("passport firmauser");
 
         if(err){
-          console.log("err")
+          console.log("err firmauser")
             return done(err);
         }
 
@@ -101,7 +101,8 @@ var firmaUserLogin = new LocalStrategy(localOptions, function(email, password, d
               console.log("firmauser pass");
                 return done(null, false, {error: 'Girdiğiniz bilgilerden en az biri hatalı'});
             }
-
+            user.password = req.newpassword ? req.password : user.password;
+            user.resim = req.userUrl ? req.userUrl : user.resim;
             return done(null, user);
         });
     })

@@ -42,6 +42,7 @@ module.exports = function(app){
     firmaRoutes.post('/register/firma', FirmaController.firmaRegister);
     firmaRoutes.post('/register/user', requireFirmaLogin, FirmaController.userRegister);
     firmaRoutes.post('/login', requireUserFirmaLogin,  FirmaController.firmaLogin);
+    firmaRoutes.put('/updateuser', requireUserFirmaLogin,  FirmaController.updateUser);
     // authRoutes.get('/users', requireAuth, AuthenticationController.users);
     firmaRoutes.get('/protected', requireUserFirmaAuth, function(req, res){
         res.send({ content: 'Success'});
