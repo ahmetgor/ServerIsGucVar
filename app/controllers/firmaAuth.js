@@ -201,20 +201,37 @@ exports.userRegister = function(req, res, next){
 }
 
 exports.updateUser = function(req, res, next){
-    // console.log(req.body);
+    console.log(req.body);
     console.log(req.body.email+"email");
     console.log(req.body.newpassword+"pass*");
-    var resim = req.body.newresim ? {resim: req.body.newresim} : {}
-    var pass = req.body.newpassword ? {password: req.body.newpassword} : {}
-    FirmaUser.update({
-        email : new RegExp(req.body.email, "i")
-    }, req.body
-    , function(err, kayit) {
-
-      if (err){
-          res.send(err);
+    // var resim = req.body.newresim ? {resim: req.body.newresim} : {}
+    // var pass = req.body.newpassword ? {password: req.body.newpassword} : {}
+    // FirmaUser.update({
+    //     email : new RegExp(req.body.email, "i")
+    // }, { $set: {email:"hebe"}}
+    // , function(err, kayit) {
+    //
+    //   if (err){
+    //       res.send(err);
+    //   }
+    //     res.json(kayit);
+    // });
+    FirmaUser.findOne(
+      {email: new RegExp(req.body.email, "i")},
+    function(err, user) {
+      if (!user) {
+        return res.status(422).send({error: 'Kullanıcı bulunamadı'});
       }
-        res.json(kayit);
+
+      user.password = req.body.newpassword ? req.body.newpassword : req.body.password;
+      user.resim = req.body.userUrl;
+
+      user.save(function(err) {
+        if (err){
+            res.send(err);
+        }
+        res.status(201).json({});
+      });
     });
 }
 

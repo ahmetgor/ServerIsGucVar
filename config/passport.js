@@ -101,8 +101,11 @@ var firmaUserLogin = new LocalStrategy(localOptions, function(req, email, passwo
               console.log("firmauser pass");
                 return done(null, false, {error: 'Girdiğiniz bilgilerden en az biri hatalı'});
             }
-            user.password = req.newpassword ? req.password : user.password;
-            user.resim = req.userUrl ? req.userUrl : user.resim;
+            // console.log(user);
+            // user.newpassword = req.newpassword ? req.newpassword : user.password;
+            // user.newresim = req.userUrl ? req.userUrl : user.resim;
+            // console.log(user);
+
             return done(null, user);
         });
     })

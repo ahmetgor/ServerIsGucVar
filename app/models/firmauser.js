@@ -71,6 +71,7 @@ var FirmaUserSchema = new mongoose.Schema({
     FirmaUserSchema.pre('update', function(next){
 
         var firmauser = this;
+        console.log(firmauser.email + "firmauser");
         var SALT_FACTOR = 5;
 
         if(!firmauser.isModified('password')){
