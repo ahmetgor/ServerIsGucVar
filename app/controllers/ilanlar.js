@@ -1,5 +1,6 @@
 var Ilan = require('../models/ilan');
 var mongoose = require('mongoose');
+var FirmaUser = require('../models/firmauser');
 
 exports.getIlanlar = function(req, res, next){
 
@@ -103,6 +104,19 @@ exports.getIlanlar = function(req, res, next){
             res.json(kayit);
         });
     }
+
+    exports.getUsers = function(req, res, next){
+      console.log(req.params.firma_id );
+
+        FirmaUser.find({ firmaObj: req.params.firma_id }, function(err, kayit) {
+
+            if (err){
+                res.send(err);
+            }
+            // console.log(kayit._id);
+            res.json(kayit);
+        });
+      }
 //     Ilan.find(function(err, kayitlar) {
 //       console.log('/'+req.query.term+'/');
 //

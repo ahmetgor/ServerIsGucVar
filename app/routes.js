@@ -43,6 +43,8 @@ module.exports = function(app){
     firmaRoutes.post('/register/user', requireFirmaLogin, FirmaController.userRegister);
     firmaRoutes.post('/login', requireUserFirmaLogin,  FirmaController.firmaLogin);
     firmaRoutes.put('/updateuser', requireUserFirmaLogin,  FirmaController.updateUser);
+    firmaRoutes.put('/updateuseren',  FirmaController.updateUser);
+    firmaRoutes.put('/updatefirma', requireUserFirmaLogin,  FirmaController.updateFirma);
     // authRoutes.get('/users', requireAuth, AuthenticationController.users);
     firmaRoutes.get('/protected', requireUserFirmaAuth, function(req, res){
         res.send({ content: 'Success'});
@@ -72,6 +74,7 @@ module.exports = function(app){
     todoRoutes.get('/', TodoController.getIlanlar);
     todoRoutes.get('/:kayit_id', TodoController.getIlan);
     todoRoutes.put('/:ilan_id', TodoController.updateIlan);
+    todoRoutes.get('/getusers/:firma_id', TodoController.getUsers);
     todoRoutes.post('/', TodoController.createIlan);
 
     // todoRoutes.post('/', requireAuth, /* AuthenticationController.roleAuthorization(['creator', 'editor', 'reader']), */ TodoController.createKayit);

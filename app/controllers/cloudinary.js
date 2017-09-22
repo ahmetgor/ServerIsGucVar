@@ -51,12 +51,24 @@ exports.postForgot = function(req, res, next) {
       });
     },
     function(token, done) {
-      User.findOne({ email: req.body.email }, function(err, user) {
+      if (req.body.prm == 'firmauser') {
+        FirmaUser.findOne({ email: req.body.email }, function(err, user) {
+          if (!user) {
+            return res.status(422).send({error: 'Email bulunamadı'});
+          }
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+          user.save(function(err) {
+            done(err, token, user);
+          });
+        });
+      }
+      else {
+        User.findOne({ email: req.body.email }, function(err, user) {
         if (!user) {
           return res.status(422).send({error: 'Email bulunamadı'});
-
         }
-
         user.resetPasswordToken = token;
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
@@ -64,6 +76,7 @@ exports.postForgot = function(req, res, next) {
           done(err, token, user);
         });
       });
+    }
     },
     function(token, user, done) {
       var smtpTransport = nodemailer.createTransport( {
@@ -102,12 +115,13 @@ exports.postForgot = function(req, res, next) {
 exports.resetPass = function(req, res, next) {
   async.waterfall([
     function(done) {
-      User.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }},
+
+      if (req.body.prm == 'firmauser') {
+        FirmaUser.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }},
       function(err, user) {
         if (!user) {
           return res.status(422).send({error: 'Email veya geçici şifre hatalı, belki de geçici şifrenin süresi doldu, tekrar resetlemeyi deneyin'});
         }
-
         user.password = req.body.password;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
@@ -119,6 +133,26 @@ exports.resetPass = function(req, res, next) {
           done(err, user);
         });
       });
+      }
+
+      else {
+        User.findOne({email: req.body.email, resetPasswordToken: req.body.resetPasswordToken, resetPasswordExpires: { $gt: Date.now() }},
+      function(err, user) {
+        if (!user) {
+          return res.status(422).send({error: 'Email veya geçici şifre hatalı, belki de geçici şifrenin süresi doldu, tekrar resetlemeyi deneyin'});
+        }
+        user.password = req.body.password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        user.save(function(err) {
+          if (err){
+              res.send(err);
+          }
+          done(err, user);
+        });
+      });
+    }
     },
     function(user, done) {
       var smtpTransport = nodemailer.createTransport( {

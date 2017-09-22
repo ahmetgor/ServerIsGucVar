@@ -133,12 +133,16 @@ exports.userRegister = function(req, res, next){
     // var firmaPass = req.body.firmaPass;
     // var enabled = true;
 // {email: {'$regex': email, $options:'i'}}
+    Firma.findOne({firma: new RegExp("^"+req.body.firma+"$", "i")}, function(err, existingFirma){
+      if(err){
+          return next(err);
+      }
+      var firmaId = existingFirma._id;
     FirmaUser.findOne({email: new RegExp("^"+req.body.email+"$", "i")}, function(err, existingUser){
 
         if(err){
             return next(err);
         }
-
         if(existingUser){
           // console.log('Bu email kullanımda');
             return res.status(422).send({error: 'Bu email kullanımda!'});
@@ -148,7 +152,7 @@ exports.userRegister = function(req, res, next){
             email: email,
             password: password,
             // firma: firma,
-            // firmaObj: firmaObj,
+            firmaObj: firmaId,
             role: 'Employer',
             enabled: false,
             resim: req.body.resim
@@ -198,6 +202,7 @@ exports.userRegister = function(req, res, next){
       });
 
       });
+    });
 }
 
 exports.updateUser = function(req, res, next){
@@ -223,12 +228,39 @@ exports.updateUser = function(req, res, next){
         return res.status(422).send({error: 'Kullanıcı bulunamadı'});
       }
 
-      user.password = req.body.newpassword ? req.body.newpassword : req.body.password;
-      user.resim = req.body.userUrl;
+      user.password = req.body.newpassword ? req.body.newpassword : user.password;
+      user.resim = req.body.userUrl ? req.body.userUrl : user.resim;
+      user.enabled = (req.body.enabled!=undefined) ? req.body.enabled : user.enabled;
 
+      console.log(user.enabled+"enabled");
       user.save(function(err) {
         if (err){
             res.send(err);
+        }
+        res.status(201).json({});
+      });
+    });
+}
+
+exports.updateFirma = function(req, res, next){
+    console.log(req.body);
+    console.log(req.body.email+"email");
+    console.log(req.body.newpassword+"pass*");
+    Firma.findOne(
+      {email: new RegExp(req.body.email, "i")},
+    function(err, firma) {
+      if (!firma) {
+        return res.status(422).send({error: 'Firma bulunamadı'});
+      }
+
+      firma.password = req.body.newpassword ? req.body.newpassword : firma.password;
+      firma.resim = req.body.userUrl;
+      firma.firma = req.body.firma;
+
+      firma.save(function(err) {
+        if (err){
+            // res.send(err);
+          return res.status(422).send({error: err});
         }
         res.status(201).json({});
       });
