@@ -86,6 +86,7 @@ module.exports = function(app){
     ozgecmisRoutes.put('/:ozgecmis_id/:param_name', requireAuth, OzgecmisController.updateOzgecmis);
     ozgecmisRoutes.put('/:ozgecmis_id', requireAuth, OzgecmisController.updateOzgecmisAll);
     ozgecmisRoutes.get('/:ozgecmis_id', requireAuth, OzgecmisController.getOzgecmis);
+    ozgecmisRoutes.get('/firma/:ozgecmis_id', OzgecmisController.getOzgecmis);
 
     ozgecmisRoutes.get('/', OzgecmisController.getOzgecmisler);
     ozgecmisRoutes.post('/begen/:ozgecmis_id/', OzgecmisController.begenOzgecmis);
