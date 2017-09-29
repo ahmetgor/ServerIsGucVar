@@ -54,7 +54,7 @@ module.exports = function(app){
     // });
 
     // apiRoutes.get('/hash', Hash Controller.getHash );
-    apiRoutes.post('/tools/avatar', AvatarController.postAvatar);
+    // apiRoutes.post('/tools/avatar', AvatarController.postAvatar);
     apiRoutes.post('/tools/forgot', AvatarController.postForgot);
     apiRoutes.post('/tools/reset', AvatarController.resetPass);
     apiRoutes.get('/tools/activate/:token', AvatarController.actUser);

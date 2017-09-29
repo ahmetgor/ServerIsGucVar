@@ -1,8 +1,12 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
+var Counter = require('../models/counter');
 
 var FirmaSchema = new mongoose.Schema({
-
+  id: {
+      type: Number
+      //required: true
+  },
     email: {
         type: String,
         // lowercase: true,
@@ -33,45 +37,52 @@ var FirmaSchema = new mongoose.Schema({
 
 FirmaSchema.pre('save', function(next){
 
-    var firmaUser = this;
+    var firma = this;
     var SALT_FACTOR = 5;
 
-    if(!firmaUser.isModified('password') &&  !firmaUser.isModified('password')){
+    if(!firma.isModified('password')) {
         return next();
     }
 
-if(firmaUser.isModified('password')) {
     bcrypt.genSalt(SALT_FACTOR, function(err, salt){
 
         if(err){
             return next(err);
         }
 
-        bcrypt.hash(firmaUser.password, salt, null, function(err, hash){
+        bcrypt.hash(firma.password, salt, null, function(err, hash){
 
             if(err){
                 return next(err);
             }
 
-            firmaUser.password = hash;
-            next();
+            firma.password = hash;
+            Counter.findOneAndUpdate({id: 'firmaid'},
+                {$inc: { seq: 1} }, function(error, counter)   {
+                if(error)
+                return next(error);
+                console.log("firma"+counter.seq)
+                firma.id = counter.seq;
+                next();
+
+              });
         });
     });
-  }
-  // if(firmaUser.isModified('firmaPass')) {
+
+  // if(firma.isModified('firmaPass')) {
   //     bcrypt.genSalt(SALT_FACTOR, function(err, salt){
   //
   //         if(err){
   //             return next(err);
   //         }
   //
-  //         bcrypt.hash(firmaUser.firmaPass, salt, null, function(err, hash){
+  //         bcrypt.hash(firma.firmaPass, salt, null, function(err, hash){
   //
   //             if(err){
   //                 return next(err);
   //             }
   //
-  //             firmaUser.password = hash;
+  //             firma.password = hash;
   //             next();
   //         });
   //     });
@@ -80,45 +91,44 @@ if(firmaUser.isModified('password')) {
 
 FirmaSchema.pre('update', function(next){
 
-    var firmaUser = this;
+    var firma = this;
     var SALT_FACTOR = 5;
 
-    if(!firmaUser.isModified('password') &&  !firmaUser.isModified('password')){
+    if(!firma.isModified('password')){
         return next();
     }
 
-if(firmaUser.isModified('password')) {
     bcrypt.genSalt(SALT_FACTOR, function(err, salt){
 
         if(err){
             return next(err);
         }
 
-        bcrypt.hash(firmaUser.password, salt, null, function(err, hash){
+        bcrypt.hash(firma.password, salt, null, function(err, hash){
 
             if(err){
                 return next(err);
             }
 
-            firmaUser.password = hash;
+            firma.password = hash;
             next();
         });
     });
-  }
-  // if(firmaUser.isModified('firmaPass')) {
+
+  // if(firma.isModified('firmaPass')) {
   //     bcrypt.genSalt(SALT_FACTOR, function(err, salt){
   //
   //         if(err){
   //             return next(err);
   //         }
   //
-  //         bcrypt.hash(firmaUser.firmaPass, salt, null, function(err, hash){
+  //         bcrypt.hash(firma.firmaPass, salt, null, function(err, hash){
   //
   //             if(err){
   //                 return next(err);
   //             }
   //
-  //             firmaUser.password = hash;
+  //             firma.password = hash;
   //             next();
   //         });
   //     });

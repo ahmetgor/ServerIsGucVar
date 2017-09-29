@@ -1,6 +1,7 @@
 var Ilan = require('../models/ilan');
 var mongoose = require('mongoose');
 var FirmaUser = require('../models/firmauser');
+var Firma = require('../models/firma');
 
 exports.getIlanlar = function(req, res, next){
 
@@ -46,11 +47,12 @@ exports.getIlanlar = function(req, res, next){
 ,function(err, kayitlar) {
 
         if (err)  {res.send(err);
+          console.log(err);
         }
         console.log(req.query.term+"st");
-        console.log(kayitlar);
+        // console.log(kayitlar);
         kayitlar = kayitlar.filter((ilan) => {
-          console.log(ilan.firma.firma);
+          // console.log(ilan.firma.firma);
                 return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st);
             });
         res.json(kayitlar);
@@ -94,7 +96,12 @@ exports.getIlanlar = function(req, res, next){
 
     exports.createIlan = function(req, res, next){
       console.log(JSON.stringify(req.body)+'create');
-
+      console.log(req.body.firma+"firma")
+      // Firma.findOne({firma: new RegExp("^"+req.body.firma+"$", "i")}, function(err, existingFirma){
+      //   if(err){
+      //       return next(err);
+      //   }
+      //   req.body.firma = existingFirma._id;
         Ilan.create(req.body, function(err, kayit) {
 
             if (err){
@@ -103,6 +110,7 @@ exports.getIlanlar = function(req, res, next){
             }
             res.json(kayit);
         });
+      // });
     }
 
     exports.getUsers = function(req, res, next){

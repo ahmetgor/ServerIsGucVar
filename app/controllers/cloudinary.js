@@ -83,7 +83,7 @@ exports.postForgot = function(req, res, next) {
         service: 'Gmail',
         auth: {
           user: 'agor.yazilim@gmail.com',
-          pass: 'musamba01'
+          pass: 'Musamba-01'
         }
       });
       var mailOptions = {
@@ -159,7 +159,7 @@ exports.resetPass = function(req, res, next) {
         service: 'Gmail',
         auth: {
           user: 'agor.yazilim@gmail.com',
-          pass: 'musamba01'
+          pass: 'Musamba-01'
         }
       });
       var mailOptions = {

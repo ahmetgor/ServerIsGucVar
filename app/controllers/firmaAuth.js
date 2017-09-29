@@ -4,6 +4,13 @@ var FirmaUser = require('../models/firmauser');
 var authConfig = require('../../config/auth');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
+var cloudinary = require('cloudinary');
+
+cloudinary.config({
+  cloud_name: 'isgucvar',
+  api_key: '139222621445761',
+  api_secret: 'MgNsTRvxidEy0HaIARj4Ip7Txq0'
+});
 
 function generateToken(user){
     return jwt.sign(user, authConfig.secret, {
@@ -39,26 +46,6 @@ exports.firmaRegister = function(req, res, next){
     var password = req.body.password;
     var firma = new RegExp("^"+req.body.firma+"$", "i");;
     var firmaPass = req.body.firmaPass;
-    // var enabled = true;
-    // if(!email){
-    //     return res.status(422).send({error: 'Email girmediniz!'});}
-    // if(!password){
-    //     return res.status(422).send({error: 'Şifre girmediniz!'});}
-    // if(!firma){
-    //     return res.status(422).send({error: 'Firma girmediniz!'});}
-    // if(!firmaPass){
-    //     return res.status(422).send({error: 'Firma şifresi girmediniz!'});}
-// {email: {'$regex': email, $options:'i'}}
-    // User.findOne({email: email}, function(err, existingUser){
-    //
-    //     if(err){
-    //         return next(err);
-    //     }
-    //
-    //     if(existingUser){
-    //         console.log('Bu email kullanımda');
-    //         return res.status(422).send({error: 'Bu email kullanımda!'});
-    //     }
 
         Firma.findOne({firma: firma}, function(err, existingFirma){
 
@@ -88,17 +75,25 @@ exports.firmaRegister = function(req, res, next){
             password: password,
             firma: req.body.firma,
             // firmaObj: firmaObj,
-            enabled: true,
-            resim: req.body.userUrl
+            enabled: true
+            // resim: req.body.userUrl
         });
 
         var firmauser = new FirmaUser({
             email: req.body.email,
             password: password,
             role: 'Manager',
-            enabled: false,
-            resim: req.body.firmaUrl
+            enabled: false
+            // resim: req.body.firmaUrl
         });
+
+        cloudinary.v2.uploader.upload(req.body.userUrl, {timeout:120000}, function(err,result) {
+          console.log(JSON.stringify(result)+'result');
+          console.log(JSON.stringify(err)+'err');
+          if (err){
+            return res.status(422).send({error: 'cloudinary'});
+          }
+          firma.resim = result.secure_url;
 
         firma.save(function(err, firma){
 
@@ -106,13 +101,20 @@ exports.firmaRegister = function(req, res, next){
                 return next(err);
             }
 
-            firmauser.firma = firma._id;
+            cloudinary.v2.uploader.upload(req.body.firmaUrl, {timeout:120000}, function(err,result) {
+              console.log(JSON.stringify(result)+'result');
+              console.log(JSON.stringify(err)+'err');
+              if (err){
+                return res.status(422).send({error: 'cloudinary'});
+              }
+              firmauser.resim = result.secure_url;
+
+            firmauser.firmaObj = firma._id;
             firmauser.save(function(err, user){
 
                 if(err){
-                    return next(err);
+                  res.send(err);
                 }
-                done(err, user);
             });
             res.status(201).json({
               // var userInfo = setUserInfo(user);
@@ -120,6 +122,8 @@ exports.firmaRegister = function(req, res, next){
             //     // user: userInfo
             });
         });
+      }); //cloudinary 2
+      });
 
       });
       });
@@ -154,25 +158,32 @@ exports.userRegister = function(req, res, next){
             // firma: firma,
             firmaObj: firmaId,
             role: 'Employer',
-            enabled: false,
-            resim: req.body.resim
+            enabled: false
         });
 
         crypto.randomBytes(20, function(err, buf) {
           var token = buf.toString('hex');
           firmauser.activateToken = token;
 
+          cloudinary.v2.uploader.upload(req.body.resim, {timeout:120000}, function(err,result) {
+            console.log(JSON.stringify(result)+'result');
+            console.log(JSON.stringify(err)+'err');
+            if (err){
+              return res.status(422).send({error: 'cloudinary'});
+            }
+            firmauser.resim = result.secure_url;
+
         firmauser.save(function(err, user){
 
             if(err){
-                return next(err);
+              res.send(err);
             }
 
             var smtpTransport = nodemailer.createTransport( {
               service: 'Gmail',
               auth: {
                 user: 'agor.yazilim@gmail.com',
-                pass: 'musamba01'
+                pass: 'Musamba-01'
               }
             });
             var mailOptions = {
@@ -199,6 +210,8 @@ exports.userRegister = function(req, res, next){
                 // user: userInfo
             });
         });
+
+      });
       });
 
       });
@@ -232,13 +245,31 @@ exports.updateUser = function(req, res, next){
       user.resim = req.body.userUrl ? req.body.userUrl : user.resim;
       user.enabled = (req.body.enabled!=undefined) ? req.body.enabled : user.enabled;
 
-      console.log(user.enabled+"enabled");
-      user.save(function(err) {
+      if(user.resim != req.body.userUrl) {
+      cloudinary.v2.uploader.upload(req.body.userUrl, {timeout:120000}, function(err,result) {
+        console.log(JSON.stringify(result)+'result');
+        console.log(JSON.stringify(err)+'err');
         if (err){
-            res.send(err);
+          return res.status(422).send({error: 'cloudinary'});
         }
-        res.status(201).json({});
+        user.resim = result.secure_url;
+        user.save(function(err) {
+          if (err){
+              res.send(err);
+          }
+          res.status(201).json({});
+        });
       });
+    }
+      else {
+        firma.save(function(err) {
+          if (err){
+              // res.send(err);
+            return res.status(422).send({error: err});
+          }
+          res.status(201).json({});
+        });
+      }
     });
 }
 
@@ -254,8 +285,17 @@ exports.updateFirma = function(req, res, next){
       }
 
       firma.password = req.body.newpassword ? req.body.newpassword : firma.password;
-      firma.resim = req.body.userUrl;
+      // firma.resim = req.body.userUrl;
       firma.firma = req.body.firma;
+
+      if(firma.resim != req.body.userUrl) {
+      cloudinary.v2.uploader.upload(req.body.userUrl, {timeout:120000}, function(err,result) {
+        console.log(JSON.stringify(result)+'result');
+        console.log(JSON.stringify(err)+'err');
+        if (err){
+          return res.status(422).send({err: 'cloudinary'});
+        }
+        firma.resim = result.secure_url;
 
       firma.save(function(err) {
         if (err){
@@ -264,6 +304,17 @@ exports.updateFirma = function(req, res, next){
         }
         res.status(201).json({});
       });
+    });
+  }
+  else {
+    firma.save(function(err) {
+      if (err){
+          // res.send(err);
+        return res.status(422).send({error: err});
+      }
+      res.status(201).json({});
+    });
+  }
     });
 }
 

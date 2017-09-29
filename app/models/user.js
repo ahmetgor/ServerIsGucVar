@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
+var Counter = require('../models/counter');
 
 var UserSchema = new mongoose.Schema({
-
-    email: {
+  id: {
+      type: Number
+      //required: true
+  },
+      email: {
         type: String,
         // lowercase: true,
         unique: true,
@@ -50,7 +54,15 @@ UserSchema.pre('save', function(next){
             }
 
             user.password = hash;
-            next();
+            Counter.findOneAndUpdate({id: 'userid'},
+                {$inc: { seq: 1} }, function(error, counter)   {
+                if(error)
+                return next(error);
+                console.log("firmauser"+counter.seq)
+                user.id = counter.seq;
+                next();
+
+              });
 
         });
     });

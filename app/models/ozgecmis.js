@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Counter = require('../models/counter');
 
 var OzgecmisSchema = new mongoose.Schema({
 
@@ -197,5 +198,20 @@ var OzgecmisSchema = new mongoose.Schema({
     timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,
     collection: 'ozgecmis'
   });
+
+  OzgecmisSchema.pre('save', function(next){
+
+      var ozgecmis = this;
+
+      Counter.findOneAndUpdate({id: 'ozgecmisid'},
+          {$inc: { seq: 1} }, function(error, counter)   {
+          if(error)
+          return next(error);
+          console.log("ozgecmis"+counter.seq)
+          ozgecmis.id = counter.seq;
+          next();
+        });
+
+    });
 
 module.exports = mongoose.model('Ozgecmis', OzgecmisSchema);
