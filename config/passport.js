@@ -9,8 +9,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var LocalFirmaStrategy = require('passport-local').Strategy;
 
 var localOptions = {
-    usernameField: 'email',
-    passReqToCallback: true
+    usernameField: 'email'
+    // passReqToCallback: true
 };
 
 var localFirmaOptions = {
