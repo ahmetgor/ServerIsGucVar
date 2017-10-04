@@ -9,8 +9,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var LocalFirmaStrategy = require('passport-local').Strategy;
 
 var localOptions = {
-    usernameField: 'email'
-    // passReqToCallback: true
+    usernameField: 'email',
+    passReqToCallback: true
 };
 
 var localFirmaOptions = {
@@ -73,7 +73,7 @@ var firmaUserLogin = new LocalStrategy(localOptions, function(req, email, passwo
         enabled: true
         // role: req.body.role
     }, function(err, user){
-      console.log("passport firmauser");
+      console.log(user);
 
         if(err){
           console.log("err firmauser")

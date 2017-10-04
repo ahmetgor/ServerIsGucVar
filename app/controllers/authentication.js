@@ -94,11 +94,6 @@ exports.register = function(req, res, next){
     //   "kurum" : ""
     // }
     ],
-    "resim" : {
-      "link" : "",
-      "media" : "",
-      "profile" : ""
-    },
     "enabled" : false
 });
 
@@ -121,4 +116,26 @@ exports.register = function(req, res, next){
         });
       });
       });
+}
+
+exports.updateUser = function(req, res, next){
+    console.log(JSON.stringify(req.body.email)+"updatenormaluser");
+    console.log(req.body.newpassword);
+    User.findOne({
+        email : req.body.email
+    }, function(err, kayit) {
+
+      if (err){
+          res.send(err);
+      }
+      if(req.body.newpassword) kayit.password = req.body.newpassword;
+
+      kayit.save(function(err) {
+        if (err){
+            // res.send(err);
+          return res.status(422).send({error: err});
+        }
+        res.status(201).json(kayit);
+      });
+    });
 }

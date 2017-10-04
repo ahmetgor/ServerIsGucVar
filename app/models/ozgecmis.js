@@ -9,18 +9,7 @@ var OzgecmisSchema = new mongoose.Schema({
   },
 
   resim: {
-    link: {
       type: String
-      ////required: true
-    },
-    media: {
-      type: String
-      //required: true
-    },
-    profile: {
-      type: String
-      //required: true
-    }
   },
 
     isim: {

@@ -241,7 +241,7 @@ exports.updateUser = function(req, res, next){
         return res.status(422).send({error: 'Kullanıcı bulunamadı'});
       }
 
-      user.password = req.body.newpassword ? req.body.newpassword : user.password;
+      if (req.body.newpassword) user.password = req.body.newpassword;
       user.resim = req.body.userUrl ? req.body.userUrl : user.resim;
       user.enabled = (req.body.enabled!=undefined) ? req.body.enabled : user.enabled;
 
@@ -284,7 +284,7 @@ exports.updateFirma = function(req, res, next){
         return res.status(422).send({error: 'Firma bulunamadı'});
       }
 
-      firma.password = req.body.newpassword ? req.body.newpassword : firma.password;
+      if (req.body.newpassword) firma.password = req.body.newpassword;
       // firma.resim = req.body.userUrl;
       firma.firma = req.body.firma;
 

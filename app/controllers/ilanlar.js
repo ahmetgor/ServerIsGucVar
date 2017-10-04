@@ -84,7 +84,7 @@ exports.getIlanlar = function(req, res, next){
         console.log(req.body.id+"body");
         console.log(req.params.ilan_id+"params");
 
-        Ilan.findOneAndUpdate({ _id: req.params.ilan_id}, req.body, function(err, kayit) {
+        Ilan.findOneAndUpdate({ _id: req.params.ilan_id}, req.body, {new: true}, function(err, kayit) {
 
           if (err){
               res.send(err);
