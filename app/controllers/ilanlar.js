@@ -36,7 +36,7 @@ exports.getIlanlar = function(req, res, next){
 
   var order = JSON.parse(req.query.orderBy);
   var il = new RegExp(kayit.il, "i");
-  console.log(kayit.tecrube+'tecrube');
+  console.log(tecrube);
   // console.log(JSON.stringify(order)+'order');
   console.log(JSON.stringify(kayit.il)+'il');
 
@@ -51,11 +51,12 @@ exports.getIlanlar = function(req, res, next){
         }
         console.log(req.query.term+"st");
         // console.log(kayitlar);
-        kayitlar = kayitlar.filter((ilan) => {
+        var filtered = kayitlar.filter((ilan) => {
           // console.log(ilan.firma.firma);
-                return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st);
+              if(!ilan) return;
+              else  return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st);
             });
-        res.json(kayitlar);
+        res.json(filtered);
     })
     .populate({ path: 'firma', match: { $or: [ firma]
     }})

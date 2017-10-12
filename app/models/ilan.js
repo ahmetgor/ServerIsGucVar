@@ -17,6 +17,10 @@ var IlanSchema = new mongoose.Schema({
       ref: 'Firma'
     },
 
+    firmaAdi: {
+        type: String,
+    },
+
     aciklama: {
         type: String,
         required: true

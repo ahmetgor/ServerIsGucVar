@@ -79,6 +79,7 @@ exports.postForgot = function(req, res, next) {
     }
     },
     function(token, user, done) {
+      console.log("mail");
       var smtpTransport = nodemailer.createTransport( {
         service: 'Gmail',
         auth: {
@@ -101,9 +102,10 @@ exports.postForgot = function(req, res, next) {
       smtpTransport.sendMail(mailOptions, function(err) {
 
         if (err){
-            res.send(err);
+          console.log(err);
+            res.status(422).send(err);
         }
-        res.send('success');
+         res.status(201).send('success');
 
       });
     }

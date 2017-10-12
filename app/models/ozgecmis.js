@@ -98,6 +98,10 @@ var OzgecmisSchema = new mongoose.Schema({
         type: String
         //required: true
       },
+      isTanimi: {
+        type: String
+        //required: true
+      },
       detay: {
         type: String
       }

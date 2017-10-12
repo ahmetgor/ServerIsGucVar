@@ -15,11 +15,13 @@ exports.getBasvurular = function(req, res, next){
       if (err){
           res.send(err);
       }
+      console.log(kayitlar);
       res.json(kayitlar);
-  } )
-.populate({ path: 'basvuru' }
+  })
+.populate({ path: 'basvuru' })
 // .exec(
-).sort({guncellemeTarih: -1}).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
+.sort({guncellemeTarih: -1})
+.skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
 }
 
 exports.getKaydedilenler = function(req, res, next){

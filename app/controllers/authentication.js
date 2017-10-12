@@ -59,6 +59,7 @@ exports.register = function(req, res, next){
         });
 
         var ozgecmis = new Ozgecmis({
+    "isim": email.substring(0, email.indexOf('@')),
     "tecrube" : [
     //   {
     //   "firma" : "",

@@ -245,7 +245,7 @@ exports.updateUser = function(req, res, next){
       user.resim = req.body.userUrl ? req.body.userUrl : user.resim;
       user.enabled = (req.body.enabled!=undefined) ? req.body.enabled : user.enabled;
 
-      if(user.resim != req.body.userUrl) {
+      if(req.body.userUrl != undefined && user.resim != req.body.userUrl) {
       cloudinary.v2.uploader.upload(req.body.userUrl, {timeout:120000}, function(err,result) {
         console.log(JSON.stringify(result)+'result');
         console.log(JSON.stringify(err)+'err');
@@ -262,7 +262,7 @@ exports.updateUser = function(req, res, next){
       });
     }
       else {
-        firma.save(function(err) {
+        user.save(function(err) {
           if (err){
               // res.send(err);
             return res.status(422).send({error: err});
@@ -274,7 +274,7 @@ exports.updateUser = function(req, res, next){
 }
 
 exports.updateFirma = function(req, res, next){
-    console.log(req.body);
+    // console.log(req.body);
     console.log(req.body.email+"email");
     console.log(req.body.newpassword+"pass*");
     Firma.findOne(
