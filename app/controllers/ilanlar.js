@@ -52,8 +52,8 @@ exports.getIlanlar = function(req, res, next){
         console.log(req.query.term+"st");
         // console.log(kayitlar);
         var filtered = kayitlar.filter((ilan) => {
-          // console.log(ilan.firma.firma);
-              if(!ilan) return;
+          console.log(ilan.firma);
+              if(!ilan||!ilan.firma) return;
               else  return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st);
             });
         res.json(filtered);

@@ -106,6 +106,22 @@ exports.getOzgecmisler = function(req, res, next){
     console.log('NOK');
     var egitim = {};
   }
+  if (kayit.basvuruId!=undefined && kayit.basvuruId.length > 0) {
+    var id = { _id:kayit.basvuruId };
+    console.log('OK'+kayit.basvuruId);
+  }
+  else {
+    console.log('NOKbas'+kayit.basvuruId);
+    var id = {};
+  }
+  if (kayit.firma!=undefined && kayit.firma.length > 0 && kayit.firma != "t" ) {
+    var firma = { firma:kayit.firma };
+    console.log('OK'+kayit.firma);
+  }
+  else {
+    console.log('NOKbas'+kayit.firma);
+    var firma = {};
+  }
   // if (kayit.egitimdurum!=undefined && kayit.egitimdurum.length > 0) {
   //   var egitimdurum = {egitimdurum:{ $in :kayit.egitimdurum }};
   //   console.log('OK');
@@ -115,9 +131,10 @@ exports.getOzgecmisler = function(req, res, next){
   //   var egitimdurum = {};
   // }
   // var firma = new RegExp(kayit.firma, "i")
-  var firma = kayit.firma ? kayit.firma : mongoose.Types.ObjectId(kayit.firma);
-  var olusturan = kayit.olusturan ? new RegExp("^"+kayit.olusturan+"$", "i") : new RegExp(kayit.olusturan);
-  var order = JSON.parse(req.query.orderBy);
+  // var firma = kayit.firma||kayit.firma != 't' ? kayit.firma : mongoose.Types.ObjectId(kayit.firma);
+  // console.log("firma  "+kayit.firma)
+  var olusturan = kayit.olusturan ? new RegExp(kayit.olusturan, "i") : new RegExp(kayit.olusturan);
+  // var order = JSON.parse(req.query.orderBy);
   var sehir = kayit.sehir ? new RegExp("^"+kayit.sehir+"$", "i") : new RegExp(kayit.sehir);
   var unvan = new RegExp(kayit.unvan, "i");
   var isim = new RegExp(kayit.isim, "i");
@@ -136,9 +153,11 @@ else var bilgisayar = [new RegExp("")];
   var egitimdurum = kayit.egitimdurum ? kayit.egitimdurum : -1;
   var seviye = kayit.seviye ? kayit.seviye : -1;
   var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -10000000000000;
-  var basvuruId = new RegExp(kayit.basvuruId, "i");
+  // var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
   console.log(olusturan+'olusturan');
+  console.log(JSON.stringify(firma)+'firma');
+  console.log(JSON.stringify(id)+'id');
   console.log(dil+'dil');
   console.log(egitimdurum+'egitimdurum');
   console.log(bilgisayar[0]+'bilgisayar');
@@ -146,9 +165,9 @@ else var bilgisayar = [new RegExp("")];
 
 
   Ilan.find(
-    {
-  $or : [ {firma: firma}, {olusturan: olusturan}]
-}, '_id'
+    { $and : [ {olusturan: olusturan}, firma, id
+      // ,{$or : [ ]}
+]}, '_id'
 ,function(err, kayitlar) {
       // if (err)  {res.send(err);
       // }
@@ -197,7 +216,9 @@ else var bilgisayar = [new RegExp("")];
                   { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }}, {enabled: true},
                    { egitimdurum: { $gte: egitimdurum }}, {bilgisayar: { $all: bilgisayar}},
                   // { egitimdurum: { $gte: egitimdurum }},
-              { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: { $all: st}}  ] }
+              { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: { $all: st}},
+                  {egitim: {$elemMatch: {okul:st}}}
+                ] }
             ]
      },
      function(err, kayitlar) {
