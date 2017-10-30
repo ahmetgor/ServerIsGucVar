@@ -1,10 +1,52 @@
 var Basvuru = require('../models/basvuru');
 var Kaydedilen = require('../models/kaydedilen');
+var Ilan = require('../models/ilan');
 
 exports.getBasvurular = function(req, res, next){
   // var st = new RegExp(req.query.term, "i")
+  var ilanlar = [];
+
   console.log(req.query.skip+'   '+req.query.limit);
     Basvuru.find(
+      { ozgecmis: req.query.ozgecmis
+    // $and : [ query, {owner: owner},
+    //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
+    // ]
+}, 'basvuru'
+,function(err, kayitlar) {
+
+      if (err){
+          res.send(err);
+      }
+      // console.log(kayitlar);
+      // res.json(kayitlar);
+      for (var key in kayitlar) {
+      console.log(key, kayitlar[key].basvuru + 'ilan');
+      ilanlar.push(kayitlar[key].basvuru);
+      }
+
+      Ilan.find(
+        {
+      $and : [  {_id: { $in : ilanlar}}
+      ]
+  },
+  function(err, kayitlar) {
+          if (err)  {res.send(err);
+          }
+          console.log(kayitlar);
+          res.json(kayitlar);
+
+ })
+.populate({ path: 'firma' })
+// .exec(
+.sort({guncellemeTarih: -1})
+.skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
+});   //basvuru find
+}
+
+exports.getKaydedilenler = function(req, res, next){
+  var kaydedilen = [];
+    Kaydedilen.find(
       { ozgecmis: req.query.ozgecmis
     // $and : [ query, {owner: owner},
     //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
@@ -15,33 +57,27 @@ exports.getBasvurular = function(req, res, next){
       if (err){
           res.send(err);
       }
-      console.log(kayitlar);
-      res.json(kayitlar);
-  })
-.populate({ path: 'basvuru' })
-// .exec(
-.sort({guncellemeTarih: -1})
-.skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
-}
-
-exports.getKaydedilenler = function(req, res, next){
-  // var st = new RegExp(req.query.term, "i")
-    Kaydedilen.find(
-      { ozgecmis: req.query.ozgecmis
-    // $and : [ query, {owner: owner},
-    //   { $or: [{baslik: st}, {firma:st}, {durum:st}, {makina:st}, {olusturan:st}, {guncelleyen:st} ] }
-    // ]
-} ,function(err, kayitlar) {
-
-      if (err){
-          res.send(err);
+      for (var key in kayitlar) {
+      console.log(key, kayitlar[key].kaydedilen + 'ilan');
+      kaydedilen.push(kayitlar[key].kaydedilen);
       }
-      res.json(kayitlar);
-  } )
-.populate({ path: 'kaydedilen' }
+
+      Ilan.find(
+        {
+      $and : [  {_id: { $in : kaydedilen}}
+      ]
+    },
+    function(err, kayitlar) {
+          if (err)  {res.send(err);
+          }
+          console.log(kayitlar);
+          res.json(kayitlar);
+      })
+.populate({ path: 'firma' }
 // .exec(
 ).sort({guncellemeTarih: -1}).skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit));
     // .sort({guncellemeTarih: -1});
+  });
 }
 
 exports.getBasvurularList = function(req, res, next){
