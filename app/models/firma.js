@@ -29,6 +29,9 @@ var FirmaSchema = new mongoose.Schema({
     type: String,
     unique: true
     },
+  telefon: {
+    type: Number
+    },
   },
   {
       timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' } ,

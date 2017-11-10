@@ -27,11 +27,13 @@ exports.getBasvurular = function(req, res, next){
 
       Ilan.find(
         {
-      $and : [  {_id: { $in : ilanlar}}
+      $and : [  {_id: { $in : ilanlar}}, {enabled: true}
       ]
   },
   function(err, kayitlar) {
-          if (err)  {res.send(err);
+          if (err)  {
+            console.log('getbasvurular error');
+            res.send(err);
           }
           console.log(kayitlar);
           res.json(kayitlar);
@@ -64,11 +66,13 @@ exports.getKaydedilenler = function(req, res, next){
 
       Ilan.find(
         {
-      $and : [  {_id: { $in : kaydedilen}}
+      $and : [  {_id: { $in : kaydedilen}}, {enabled: true}
       ]
     },
     function(err, kayitlar) {
-          if (err)  {res.send(err);
+          if (err)  {
+            console.log('getkaydedilenler error');
+            res.send(err);
           }
           console.log(kayitlar);
           res.json(kayitlar);
@@ -90,6 +94,7 @@ exports.getBasvurularList = function(req, res, next){
 }, function(err, kayitlar) {
 
         if (err){
+          console.log('getbasvurularlist error');
             res.send(err);
         }
         res.json(kayitlar);
@@ -107,6 +112,7 @@ exports.getKaydedilenlerList = function(req, res, next){
 }, function(err, kayitlar) {
 
         if (err){
+          console.log('getkaydedilenlist error');
             res.send(err);
         }
         res.json(kayitlar);

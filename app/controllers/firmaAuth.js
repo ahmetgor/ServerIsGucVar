@@ -69,11 +69,12 @@ exports.firmaRegister = function(req, res, next){
                     return res.status(422).send({error: 'Bu email kullanımda!'});
                 }
 
-        console.log("user yaratılıyor")
+        console.log("firma yaratılıyor")
         var firma = new Firma({
             email: req.body.email,
             password: password,
             firma: req.body.firma,
+            telefon: req.body.telefon,
             // firmaObj: firmaObj,
             enabled: true
             // resim: req.body.userUrl
@@ -83,7 +84,7 @@ exports.firmaRegister = function(req, res, next){
             email: req.body.email,
             password: password,
             role: 'Manager',
-            enabled: false
+            enabled: true
             // resim: req.body.firmaUrl
         });
 

@@ -22,6 +22,12 @@ exports.getIlanlar = function(req, res, next){
     var egitim = {};
   }
 
+  if (kayit.tip!=undefined && kayit.tip.length > 0) {
+    var tip = {tip: kayit.tip};
+  }
+  else {
+    var tip = {};
+  }
   if (kayit.firma)
   var firma = {firma: kayit.firma};
   else var firma = {firma: new RegExp("", "i")};
@@ -42,7 +48,7 @@ exports.getIlanlar = function(req, res, next){
 
     Ilan.find(
       {
-    $and : [ tecrube, egitim, {il: il}, {olusturan: olusturan}, enabled    ]
+    $and : [ tecrube, egitim, {il: il}, {olusturan: olusturan}, enabled, tip    ]
 }
 ,function(err, kayitlar) {
 
@@ -54,7 +60,7 @@ exports.getIlanlar = function(req, res, next){
         var filtered = kayitlar.filter((ilan) => {
           console.log(ilan.firma);
               if(!ilan||!ilan.firma) return;
-              else  return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st);
+              else  return ilan.firma.firma.match(st) || ilan.baslik.match(st) || ilan.aciklama.match(st) || ilan.id == req.query.term;
             });
         res.json(filtered);
     })
@@ -117,7 +123,7 @@ exports.getIlanlar = function(req, res, next){
     exports.getUsers = function(req, res, next){
       console.log(req.params.firma_id );
 
-        FirmaUser.find({ firmaObj: req.params.firma_id }, function(err, kayit) {
+        FirmaUser.find({ firmaObj: req.params.firma_id, role: { $ne: 'Manager'} }, function(err, kayit) {
 
             if (err){
                 res.send(err);

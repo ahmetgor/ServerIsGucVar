@@ -219,7 +219,8 @@ else var bilgisayar = [new RegExp("")];
               { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: { $all: st}},
                   {egitim: {$elemMatch: {okul:st}}}, {egitim: {$elemMatch: {ulke:st}}}, {egitim: {$elemMatch: {bolum:st}}},
                   {tecrube: {$elemMatch: {pozisyon:st}}}, {tecrube: {$elemMatch: {firma:st}}},
-                  {tecrube: {$elemMatch: {isTanimiKisa:st}}}, {tecrube: {$elemMatch: {ulke:st}}}
+                  {tecrube: {$elemMatch: {isTanimiKisa:st}}}, {tecrube: {$elemMatch: {ulke:st}}},
+                  {id:req.query.term}
                 ] }
             ]
      },
