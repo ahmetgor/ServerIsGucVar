@@ -52,8 +52,8 @@ exports.getIlanlar = function(req, res, next){
 }
 ,function(err, kayitlar) {
 
-        if (err)  {res.send(err);
-          console.log(err);
+        if (err)  {
+          return res.send(err);
         }
         console.log(req.query.term+"st");
         // console.log(kayitlar);
@@ -78,7 +78,7 @@ exports.getIlanlar = function(req, res, next){
       Ilan.findOne({ _id: req.params.kayit_id }, function(err, kayit) {
 
           if (err){
-              res.send(err);
+            return  res.send(err);
           }
           // console.log(kayit._id);
           res.json(kayit);
@@ -94,7 +94,7 @@ exports.getIlanlar = function(req, res, next){
         Ilan.findOneAndUpdate({ _id: req.params.ilan_id}, req.body, {new: true}, function(err, kayit) {
 
           if (err){
-              res.send(err);
+            return  res.send(err);
           }
           console.log(JSON.stringify(kayit)+"kayit");
             res.json(kayit);
@@ -113,7 +113,7 @@ exports.getIlanlar = function(req, res, next){
 
             if (err){
               console.log(JSON.stringify(err)+'err');
-                res.send(err);
+              return  res.send(err);
             }
             res.json(kayit);
         });
@@ -126,7 +126,7 @@ exports.getIlanlar = function(req, res, next){
         FirmaUser.find({ firmaObj: req.params.firma_id, role: { $ne: 'Manager'} }, function(err, kayit) {
 
             if (err){
-                res.send(err);
+              return  res.send(err);
             }
             // console.log(kayit._id);
             res.json(kayit);

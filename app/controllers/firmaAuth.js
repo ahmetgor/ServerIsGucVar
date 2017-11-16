@@ -114,7 +114,7 @@ exports.firmaRegister = function(req, res, next){
             firmauser.save(function(err, user){
 
                 if(err){
-                  res.send(err);
+                return  res.send(err);
                 }
             });
             res.status(201).json({
@@ -177,7 +177,7 @@ exports.userRegister = function(req, res, next){
         firmauser.save(function(err, user){
 
             if(err){
-              res.send(err);
+            return  res.send(err);
             }
 
             var smtpTransport = nodemailer.createTransport( {
@@ -200,7 +200,7 @@ exports.userRegister = function(req, res, next){
             smtpTransport.sendMail(mailOptions, function(err) {
 
               if (err){
-                  res.send(err);
+                return  res.send(err);
               }
               // res.send('success');
 
@@ -256,7 +256,7 @@ exports.updateUser = function(req, res, next){
         user.resim = result.secure_url;
         user.save(function(err) {
           if (err){
-              res.send(err);
+            return  res.send(err);
           }
           res.status(201).json({});
         });

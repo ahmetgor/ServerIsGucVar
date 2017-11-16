@@ -16,7 +16,7 @@ exports.getBasvurular = function(req, res, next){
 ,function(err, kayitlar) {
 
       if (err){
-          res.send(err);
+          return res.send(err);
       }
       // console.log(kayitlar);
       // res.json(kayitlar);
@@ -33,7 +33,7 @@ exports.getBasvurular = function(req, res, next){
   function(err, kayitlar) {
           if (err)  {
             console.log('getbasvurular error');
-            res.send(err);
+            return res.send(err);
           }
           console.log(kayitlar);
           res.json(kayitlar);
@@ -57,7 +57,7 @@ exports.getKaydedilenler = function(req, res, next){
 ,function(err, kayitlar) {
 
       if (err){
-          res.send(err);
+          return res.send(err);
       }
       for (var key in kayitlar) {
       console.log(key, kayitlar[key].kaydedilen + 'ilan');
@@ -72,7 +72,7 @@ exports.getKaydedilenler = function(req, res, next){
     function(err, kayitlar) {
           if (err)  {
             console.log('getkaydedilenler error');
-            res.send(err);
+            return res.send(err);
           }
           console.log(kayitlar);
           res.json(kayitlar);
@@ -95,7 +95,7 @@ exports.getBasvurularList = function(req, res, next){
 
         if (err){
           console.log('getbasvurularlist error');
-            res.send(err);
+            return res.send(err);
         }
         res.json(kayitlar);
     });
@@ -113,7 +113,7 @@ exports.getKaydedilenlerList = function(req, res, next){
 
         if (err){
           console.log('getkaydedilenlist error');
-            res.send(err);
+            return res.send(err);
         }
         res.json(kayitlar);
     });
@@ -125,7 +125,7 @@ exports.getKaydedilenlerList = function(req, res, next){
         Basvuru.findOne({ _id: req.params.basvuru_id }, function(err, kayit) {
 
             if (err){
-                res.send(err);
+                return res.send(err);
             }
             res.json(kayit);
         });
@@ -137,7 +137,7 @@ exports.createBasvuru = function(req, res, next){
     Basvuru.create(req.body, function(err, kayit) {
 
         if (err){
-            res.send(err);
+            return res.send(err);
         }
         res.json(kayit);
     });
@@ -151,7 +151,7 @@ exports.deleteBasvuru = function(req, res, next){
     }, function(err, kayit) {
 
       if (err){
-          res.send(err);
+          return res.send(err);
       }
         res.json(kayit);
     });
@@ -181,7 +181,7 @@ exports.deleteBasvuru = function(req, res, next){
         Kaydedilen.findOne({ _id: req.params.kaydedilen_id }, function(err, kayit) {
 
             if (err){
-                res.send(err);
+                return res.send(err);
             }
 
             res.json(kayit);
@@ -194,7 +194,7 @@ exports.createKaydedilen = function(req, res, next){
     Kaydedilen.create(req.body, function(err, kayit) {
 
         if (err){
-            res.send(err);
+            return res.send(err);
         }
         res.json(kayit);
     });
@@ -210,7 +210,7 @@ exports.deleteKaydedilen = function(req, res, next){
     }, function(err, kayit) {
 
       if (err){
-          res.send(err);
+          return res.send(err);
       }
         res.json(kayit);
     });

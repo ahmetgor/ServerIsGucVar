@@ -5,7 +5,7 @@ exports.getUsers = function(req, res, next){
     User.find({ firma: req.user.firma }, function(err, kayit) {
 
         if (err){
-            res.send(err);
+            return res.send(err);
         }
 
         res.json(kayit);
@@ -17,7 +17,7 @@ exports.getUsers = function(req, res, next){
       User.findOne({ email: req.params.email }, { password: 0 }, function(err, kayit) {
 
           if (err){
-              res.send(err);
+            return  res.send(err);
           }
 
           res.json(kayit);
@@ -31,7 +31,7 @@ exports.getUsers = function(req, res, next){
       }, req.body, function(err, kayit) {
 
         if (err){
-            res.send(err);
+            return res.send(err);
         }
           res.json(kayit);
       });
@@ -44,7 +44,7 @@ exports.getUsers = function(req, res, next){
       }, function(err, kayit) {
 
         if (err){
-            res.send(err);
+            return res.send(err);
         }
           res.json(kayit);
       });

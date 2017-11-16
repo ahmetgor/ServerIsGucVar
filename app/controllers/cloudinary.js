@@ -103,7 +103,7 @@ exports.postForgot = function(req, res, next) {
 
         if (err){
           console.log(err);
-            res.status(422).send(err);
+          return res.status(422).send(err);
         }
          res.status(201).send('success');
 
@@ -130,7 +130,7 @@ exports.resetPass = function(req, res, next) {
 
         user.save(function(err) {
           if (err){
-              res.send(err);
+            return res.send(err);
           }
           done(err, user);
         });
@@ -149,7 +149,7 @@ exports.resetPass = function(req, res, next) {
 
         user.save(function(err) {
           if (err){
-              res.send(err);
+              return res.send(err);
           }
           done(err, user);
         });
@@ -183,7 +183,7 @@ exports.resetPass = function(req, res, next) {
     }
   ], function(err) {
     if (err){
-        res.send(err);
+        return res.send(err);
       }
       });
     }

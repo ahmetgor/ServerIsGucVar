@@ -10,7 +10,7 @@ exports.getOzgecmis = function(req, res, next){
       Ozgecmis.findOne({ _id: req.params.ozgecmis_id }, function(err, kayit) {
 
           if (err){
-              res.send(err);
+            return  res.send(err);
           }
           res.json(kayit);
       });
@@ -25,7 +25,7 @@ exports.updateOzgecmis = function(req, res, next){
 
     Ozgecmis.findOneAndUpdate({ _id: req.params.ozgecmis_id }, param_name, {new: true}, function(err, kayit) {
       if (err){
-          res.send(err);
+        return  res.send(err);
       }
       console.log(JSON.stringify(kayit));
         res.json(kayit);
@@ -48,7 +48,7 @@ exports.updateOzgecmisAll = function(req, res, next){
     Ozgecmis.findOneAndUpdate({ _id: req.params.ozgecmis_id }, req.body, {new: true}, function(err, kayit) {
 
       if (err){
-          res.send(err);
+        return  res.send(err);
       }
         res.json(kayit);
     });
@@ -58,7 +58,7 @@ exports.updateOzgecmisAll = function(req, res, next){
 
     Ozgecmis.findOneAndUpdate({ _id: req.params.ozgecmis_id }, req.body, {new: true}, function(err, kayit) {
       if (err){
-          res.send(err);
+        return  res.send(err);
       }
         res.json(kayit);
     });
@@ -226,7 +226,8 @@ else var bilgisayar = [new RegExp("")];
      },
      function(err, kayitlar) {
              // console.log(JSON.stringify(kayitlar)+"kayitlar");
-             if (err)  { res.send(err);
+             if (err)  {
+               return res.send(err);
              }
                  // kayitlar = kayitlar.filter((item) => {
                  //   return (item.ozgecmis != null);
@@ -280,7 +281,7 @@ exports.begenOzgecmis = function(req, res, next){
     Ozgecmis.update({ _id: req.params.ozgecmis_id }, segment,  function(err, kayit) {
 
       if (err){
-          res.send(err);
+        return  res.send(err);
       }
        console.log(kayit);
         res.json(kayit);
@@ -306,7 +307,7 @@ exports.begenmeOzgecmis = function(req, res, next){
     Ozgecmis.update({ _id: req.params.ozgecmis_id }, segment, function(err, kayit) {
 
       if (err){
-          res.send(err);
+        return  res.send(err);
       }
         res.json(kayit);
     });
