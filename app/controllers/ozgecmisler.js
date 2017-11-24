@@ -153,6 +153,7 @@ else var bilgisayar = [new RegExp("")];
   var egitimdurum = kayit.egitimdurum ? kayit.egitimdurum : -1;
   var seviye = kayit.seviye ? kayit.seviye : -1;
   var dogumTarihi = kayit.dogumTarihi ? kayit.dogumTarihi : -10000000000000;
+  var ozgecmisno = isNaN(req.query.term) ? {id: {$lte : -1}} : {id:req.query.term};
   // var basvuruId = new RegExp(kayit.basvuruId, "i");
   // var basvuruId = kayit.basvuruId;
   console.log(olusturan+'olusturan');
@@ -220,7 +221,7 @@ else var bilgisayar = [new RegExp("")];
                   {egitim: {$elemMatch: {okul:st}}}, {egitim: {$elemMatch: {ulke:st}}}, {egitim: {$elemMatch: {bolum:st}}},
                   {tecrube: {$elemMatch: {pozisyon:st}}}, {tecrube: {$elemMatch: {firma:st}}},
                   {tecrube: {$elemMatch: {isTanimiKisa:st}}}, {tecrube: {$elemMatch: {ulke:st}}},
-                  {id:req.query.term}
+                  ozgecmisno
                 ] }
             ]
      },

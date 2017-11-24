@@ -29,7 +29,7 @@ exports.getIlanlar = function(req, res, next){
     var tip = {};
   }
   if (kayit.firma)
-  var firma = {firma: kayit.firma};
+  var firma = {firma: new RegExp("^"+kayit.firma+"$", "i")};
   else var firma = {firma: new RegExp("", "i")};
 
   // var firma = new RegExp(kayit.firma, "i");
