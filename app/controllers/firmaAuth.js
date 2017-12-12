@@ -6,6 +6,10 @@ var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var cloudinary = require('cloudinary');
 
+var sifre_email = "sifre@isgucvar.com";
+var sifre_sifre = "Musamba-0912"
+var sifre_smtp = "rover.guzelhosting.com"
+
 cloudinary.config({
   cloud_name: 'isgucvar',
   api_key: '139222621445761',
@@ -102,6 +106,11 @@ exports.firmaRegister = function(req, res, next){
                 return next(err);
             }
 
+            crypto.randomBytes(20, function(err, buf) {
+              var token = buf.toString('hex');
+              firmauser.activateToken = token;
+              firmauser.activateExpires = Date.now() + 7889238000; // 3 ay
+
             cloudinary.v2.uploader.upload(req.body.firmaUrl, {timeout:120000}, function(err,result) {
               console.log(JSON.stringify(result)+'result');
               console.log(JSON.stringify(err)+'err');
@@ -116,14 +125,44 @@ exports.firmaRegister = function(req, res, next){
                 if(err){
                 return  res.send(err);
                 }
+                var smtpTransport = nodemailer.createTransport( {
+                  host: sifre_smtp,
+                  port: 465,
+                  secure: true, // use TLS
+                  auth: {
+                      user: sifre_email,
+                      pass: sifre_sifre
+                  }
+                });
+                var mailOptions = {
+                  to: user.email,
+                  from: sifre_email,
+                  subject: 'İşGüçVar Hesap Aktivasyon',
+                  text: 'Merhaba,\n\n' +
+                    'İşgüçvar hesabı oluşturdunuz. Hesabınızın aktiflenmesi için lütfen aşağıdaki linke tıklayın. '+
+                    '3 ay içinde aktiflenmeyen kullanıcı hesapları kapanacaktır. \n\n' +
+                    'http://' + req.headers.host + '/api/tools/activate/' + token + '\n\n' +
+                    'Görüşmek üzere :) \n'+
+                    'İşGüçVar Ekibi \n'
+                };
+                smtpTransport.sendMail(mailOptions, function(err) {
+
+                  if (err){
+                    return  res.send(err);
+                  }
+                  // res.send('success');
+
+                });
+
             });
             res.status(201).json({
               // var userInfo = setUserInfo(user);
             //     // token: 'JWT ' + generateToken(userInfo),
             //     // user: userInfo
             });
-        });
-      }); //cloudinary 2
+        });//cloudinary 2
+      });
+      });
       });
 
       });
@@ -165,6 +204,7 @@ exports.userRegister = function(req, res, next){
         crypto.randomBytes(20, function(err, buf) {
           var token = buf.toString('hex');
           firmauser.activateToken = token;
+          firmauser.activateExpires = Date.now() + 7889238000; // 3 ay
 
           cloudinary.v2.uploader.upload(req.body.resim, {timeout:120000}, function(err,result) {
             console.log(JSON.stringify(result)+'result');
@@ -181,19 +221,21 @@ exports.userRegister = function(req, res, next){
             }
 
             var smtpTransport = nodemailer.createTransport( {
-              service: 'Gmail',
+              host: sifre_smtp,
+              port: 465,
+              secure: true, // use TLS
               auth: {
-                user: 'agor.yazilim@gmail.com',
-                pass: 'Musamba-01'
+                  user: sifre_email,
+                  pass: sifre_sifre
               }
             });
             var mailOptions = {
               to: user.email,
-              from: 'agor.yazilim@gmail.com',
+              from: sifre_email,
               subject: 'İşGüçVar Hesap Aktivasyon',
               text: 'Merhaba,\n\n' +
                 'İşgüçvar hesabı oluşturdunuz. Hesabınızın aktiflenmesi için lütfen aşağıdaki linke tıklayın. \n\n' +
-                'http://' + req.headers.host + '/tools/activate/' + token + '\n\n' +
+                'http://' + req.headers.host + '/api/tools/activate/' + token + '\n\n' +
                 'Görüşmek üzere :) \n'+
                 'İşGüçVar Ekibi \n'
             };

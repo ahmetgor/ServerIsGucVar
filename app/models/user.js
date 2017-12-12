@@ -23,6 +23,7 @@ var UserSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   activateToken: String,
+  activateExpires: Date,
   ozgecmis: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ozgecmis'

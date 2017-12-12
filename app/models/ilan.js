@@ -33,19 +33,19 @@ var IlanSchema = new mongoose.Schema({
 
     tip: {
         type: String,
-        enum: ['Yarı Z.', 'Tam Z.', 'Proje Bazlı', 'Günlük', 'Staj'],
+        // enum: ['Yarı Z.', 'Tam Z.', 'Proje Bazlı', 'Günlük', 'Staj'],
         required: true
     },
 
     egitim: {
       type: [String],
-      enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
+      // enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora'],
       required: true
     },
 
     tecrube: {
       type: [String],
-      enum: ['Az Tecrübeli (Junior)', 'Orta Tecrübeli (Midlevel)', 'Çok Tecrübeli (Senior)', 'Yönetici (Manager)', 'Stajyer', 'Hizmet Personeli & İşçi'],
+      // enum: ['Az Tecrübeli (Junior)', 'Orta Tecrübeli (Midlevel)', 'Çok Tecrübeli (Senior)', 'Yönetici (Manager)', 'Stajyer', 'Hizmet Personeli & İşçi'],
       required: true
     },
 
@@ -54,8 +54,8 @@ var IlanSchema = new mongoose.Schema({
     },
 
     askerlik: {
-      type: String,
-      enum: ['Yapıldı/Muaf', 'Yapılmadı/Tecilli'],
+      type: String
+      // enum: ['Yapıldı/Muaf', 'Yapılmadı/Tecilli'],
     },
 
     goruntulenme: {

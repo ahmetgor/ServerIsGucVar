@@ -27,6 +27,7 @@ var FirmaUserSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   activateToken: String,
+  activateExpires: Date,
   firmaObj: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Firma'

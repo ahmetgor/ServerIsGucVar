@@ -25,6 +25,7 @@ var FirmaSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   activateToken: String,
+  activateExpires: Date,
   firma: {
     type: String,
     unique: true

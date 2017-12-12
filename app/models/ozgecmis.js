@@ -52,8 +52,8 @@ var OzgecmisSchema = new mongoose.Schema({
         type: String
       },
       derece: {
-        type: String,
-        enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora']
+        type: String
+        // enum: ['Lise', 'Lisans', 'Yüksek Lisans', 'Doktora']
         //required: true
       },
       cikis: {

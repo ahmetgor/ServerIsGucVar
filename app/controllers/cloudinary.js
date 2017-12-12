@@ -5,6 +5,10 @@ var FirmaUser = require('../models/firmauser');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 
+var sifre_email = "sifre@isgucvar.com";
+var sifre_sifre = "Musamba-0912"
+var sifre_smtp = "rover.guzelhosting.com"
+
 cloudinary.config({
   cloud_name: 'isgucvar',
   api_key: '139222621445761',
@@ -23,12 +27,20 @@ cloudinary.v2.uploader.upload(req.body.resim, {timeout:120000}, function(err,res
 }
 
 exports.actUser = function(req, res, next){
+  console.log(new Date(new Date().setMonth(new Date().getMonth()-3)));
+  console.log("asdasdads");
   FirmaUser.findOne({activateToken: req.params.token},
   function(err, user) {
     if (!user) {
-      return res.status(422).send({error: 'Aktivasyon no bulunamadı.'});
+      console.log('user hatası');
+       return res.status(422).send({hata: 'Aktivasyon no bulunamadı.'});
+      // res.send("Aktivasyon başarısız");
     }
-
+    else if(user.activateExpires < Date.now()) {
+      return res.status(422).send({hata: 'Üyeliğinizden itibaren 3 ay geçtiğinden hesabınız aktiflenememekte. '+
+                                            'destek.isveren@isgucvar.com ile iletişime geçebilirsiniz'});
+    }
+    console.log('user ok');
     user.activateToken = undefined;
     user.enabled = true;
 
@@ -81,15 +93,22 @@ exports.postForgot = function(req, res, next) {
     function(token, user, done) {
       console.log("mail");
       var smtpTransport = nodemailer.createTransport( {
-        service: 'Gmail',
+        // service: 'Gmail',
+        // auth: {
+        //   user: 'agor.yazilim@gmail.com',
+        //   pass: 'Musamba-01'
+        host: sifre_smtp,
+        port: 465,
+        secure: true, // use TLS
         auth: {
-          user: 'agor.yazilim@gmail.com',
-          pass: 'Musamba-01'
+            user: sifre_email,
+            pass: sifre_sifre
         }
+
       });
       var mailOptions = {
         to: user.email,
-        from: 'agor.yazilim@gmail.com',
+        from: sifre_email,
         subject: 'İşGüçVar Şifre Reset',
         text: 'Merhaba,\n\n' +
           'Bu mail şifrenizin resetlenmesi isteğine istinaden atılmıştır.\n\n' +
@@ -158,15 +177,17 @@ exports.resetPass = function(req, res, next) {
     },
     function(user, done) {
       var smtpTransport = nodemailer.createTransport( {
-        service: 'Gmail',
+        host: sifre_smtp,
+        port: 465,
+        secure: true, // use TLS
         auth: {
-          user: 'agor.yazilim@gmail.com',
-          pass: 'Musamba-01'
+            user: sifre_email,
+            pass: sifre_sifre
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'agor.yazilim@gmail.com',
+        from: sifre_email,
         subject: 'İşGüçVar şifreniz değişti',
         text: 'Merhaba,\n\n' +
           user.email + ' hesabı için şifreniz değişti.\n\n' +
