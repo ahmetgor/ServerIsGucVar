@@ -131,6 +131,7 @@ exports.updateUser = function(req, res, next){
       }
       if(req.body.newpassword) kayit.password = req.body.newpassword;
 
+      kayit.guncellemeTarih = Date.now();
       kayit.save(function(err) {
         if (err){
             // res.send(err);

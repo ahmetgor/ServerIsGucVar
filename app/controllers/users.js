@@ -26,6 +26,7 @@ exports.getUsers = function(req, res, next){
 
   exports.updateUser = function(req, res, next){
       // console.log(req.body);
+      req.body.guncellemeTarih = Date.now();
       User.update({
           _id : req.params.user_id
       }, req.body, function(err, kayit) {

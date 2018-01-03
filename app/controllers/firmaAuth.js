@@ -287,6 +287,7 @@ exports.updateUser = function(req, res, next){
       if (req.body.newpassword) user.password = req.body.newpassword;
       user.resim = req.body.userUrl ? req.body.userUrl : user.resim;
       user.enabled = (req.body.enabled!=undefined) ? req.body.enabled : user.enabled;
+      user.guncellemeTarih = Date.now();
 
       if(req.body.userUrl != undefined && user.resim != req.body.userUrl) {
       cloudinary.v2.uploader.upload(req.body.userUrl, {timeout:120000}, function(err,result) {
@@ -330,6 +331,7 @@ exports.updateFirma = function(req, res, next){
       if (req.body.newpassword) firma.password = req.body.newpassword;
       // firma.resim = req.body.userUrl;
       firma.firma = req.body.firma;
+      firma.guncellemeTarih = Date.now();
 
       if(firma.resim != req.body.userUrl) {
       cloudinary.v2.uploader.upload(req.body.userUrl, {timeout:120000}, function(err,result) {

@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Ilan = require('../models/ilan');
 var async = require('async');
 var cloudinary = require('cloudinary');
+var User = require('../models/user');
 
 exports.getOzgecmis = function(req, res, next){
       Ozgecmis.findOne({ _id: req.params.ozgecmis_id }, function(err, kayit) {
@@ -30,7 +31,6 @@ exports.updateOzgecmis = function(req, res, next){
       console.log(JSON.stringify(kayit));
         res.json(kayit);
     });
-
 }
 
 exports.updateOzgecmisAll = function(req, res, next){
@@ -44,6 +44,7 @@ exports.updateOzgecmisAll = function(req, res, next){
           return res.status(422).send({error: 'cloudinary'});
         }
 
+    req.body.guncellemeTarih = Date.now();
     req.body.resim = result.secure_url;
     Ozgecmis.findOneAndUpdate({ _id: req.params.ozgecmis_id }, req.body, {new: true}, function(err, kayit) {
 
@@ -122,14 +123,7 @@ exports.getOzgecmisler = function(req, res, next){
     console.log('NOKbas'+kayit.firma);
     var firma = {};
   }
-  // if (kayit.egitimdurum!=undefined && kayit.egitimdurum.length > 0) {
-  //   var egitimdurum = {egitimdurum:{ $in :kayit.egitimdurum }};
-  //   console.log('OK');
-  // }
-  // else {
-  //   console.log('NOK');
-  //   var egitimdurum = {};
-  // }
+
   // var firma = new RegExp(kayit.firma, "i")
   // var firma = kayit.firma||kayit.firma != 't' ? kayit.firma : mongoose.Types.ObjectId(kayit.firma);
   // console.log("firma  "+kayit.firma)
@@ -176,10 +170,7 @@ else var bilgisayar = [new RegExp("")];
     console.log(key, kayitlar[key]._id + 'ilan');
     ilanlar.push(kayitlar[key]._id);
     }
-    // console.log(basvuruId+" basvuruid");
-    // console.log(kayit.basvuruId+" kayit.basvuruid");
-    // console.log(JSON.stringify(ilanlar)+"ilanlarinner");
-    // ["58ecf27d59cf2ca65d4e0871", "59089a0a4be8d6e2c51b7e22", "59089a234be8d6e2c51b7e23"]
+
     Basvuru.find(
       {
     $and : [  {basvuru: { $in : ilanlar}}
@@ -240,7 +231,7 @@ else var bilgisayar = [new RegExp("")];
 
     })
       .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
-      .sort({_id: -1});
+      .sort({enabled: -1, _id: -1});
     // TODO: egitim, tecrübe, egitimdurum, yaş, tecrübe
     // .populate({ path: 'ozgecmis', match: { $and : [ segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
     //           {yabanciDil: { $elemMatch: { dil: dil}}}, { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }},
@@ -256,18 +247,22 @@ else var bilgisayar = [new RegExp("")];
     // });
       // .exec(
 
-
           });
   });
-
 }
 
 exports.begenOzgecmis = function(req, res, next){
   var begenObject = req.body.userId;
-  // var begenObject = mongoose.Types.ObjectId(req.body.userId);
+  // console.log(JSON.stringify(begenObject)+"begenObject");
+
+  var not = {};
+  not.aciklama = req.body.firma + ' sizi beğenilenler listesine ekledi.';
+  not.notTarih = Date.now();
+  not.okundu = 'N';
+
   switch(req.body.segment) {
     case 'okundu':
-    var segment = { $push: { okundu: begenObject } };
+    var segment = { $push: { okundu: begenObject }};
     break;
     case 'begen':
     var segment = { $push: { begen: begenObject } };
@@ -279,14 +274,23 @@ exports.begenOzgecmis = function(req, res, next){
     var segment = {};
   }
   // console.log(JSON.stringify(segment)+"segment");
+  // console.log(JSON.stringify(not)+"not");
+
     Ozgecmis.update({ _id: req.params.ozgecmis_id }, segment,  function(err, kayit) {
+
+      User.findOneAndUpdate({ ozgecmis : req.params.ozgecmis_id}, {$push: {not: not}},
+        // { runValidators: true, context: 'query' },
+        function(err, user) {
+
+          console.log(user);
 
       if (err){
         return  res.send(err);
       }
-       console.log(kayit);
         res.json(kayit);
     });
+  });
+
 }
 
 exports.begenmeOzgecmis = function(req, res, next){

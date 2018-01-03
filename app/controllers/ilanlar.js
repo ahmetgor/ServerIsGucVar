@@ -67,7 +67,7 @@ exports.getIlanlar = function(req, res, next){
     .populate({ path: 'firma', match: { $or: [ firma]
     }})
     .skip(parseInt(req.query.skip)*parseInt(req.query.limit)).limit(parseInt(req.query.limit))
-      .sort({_id: -1});
+      .sort({enabled: -1, _id: -1});
 
 
 }
@@ -90,6 +90,7 @@ exports.getIlanlar = function(req, res, next){
         console.log(req.body);
         console.log(req.body.id+"body");
         console.log(req.params.ilan_id+"params");
+        req.body.guncellemeTarih = Date.now();
 
         Ilan.findOneAndUpdate({ _id: req.params.ilan_id}, req.body, {new: true}, function(err, kayit) {
 

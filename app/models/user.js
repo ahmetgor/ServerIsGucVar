@@ -28,6 +28,16 @@ var UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Ozgecmis'
   },
+  not: {
+  aciklama: {
+      type: String
+  },
+  okundu: {
+      type: String
+  },
+  notTarih: {
+      type: Date
+  }},
   },
     {
       timestamps: { createdAt: 'olusturmaTarih', updatedAt: 'guncellemeTarih' }
@@ -64,7 +74,6 @@ UserSchema.pre('save', function(next){
                 next();
 
               });
-
         });
     });
 });
