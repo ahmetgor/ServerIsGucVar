@@ -78,7 +78,7 @@ var IlanSchema = new mongoose.Schema({
         type: Boolean
     },
 
-    tag: [{
+    tags: [{
         tag: {
         type: String
           },
