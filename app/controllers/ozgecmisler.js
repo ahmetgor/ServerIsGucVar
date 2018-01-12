@@ -135,14 +135,15 @@ exports.getOzgecmisler = function(req, res, next){
   var dil = kayit.dil ? new RegExp("^"+kayit.dil+"$", "i") : new RegExp("");
   // var bilgisayar = kayit.bilgisayar ? new RegExp(kayit.bilgisayar, "i") : new RegExp(kayit.bilgisayar);
 
-if (kayit.bilgisayar) {
-  var bilgisayar = kayit.bilgisayar.split(',');
-  for (var key in bilgisayar) {
-  bilgisayar[key] = new RegExp(bilgisayar[key].trim(), "i");
-  console.log(key, bilgisayar[key] + 'bilgisayar');
-  }
-}
-else var bilgisayar = [new RegExp("")];
+// if (kayit.bilgisayar) {
+//   var bilgisayar = kayit.bilgisayar.split(',');
+//   for (var key in bilgisayar) {
+//   bilgisayar[key] = new RegExp(bilgisayar[key].trim(), "i");
+//   console.log(key, bilgisayar[key] + 'bilgisayar');
+//   }
+// }
+// else var bilgisayar = [new RegExp("")];
+
   var yilTecrube = kayit.yilTecrube ? kayit.yilTecrube : -1;
   var egitimdurum = kayit.egitimdurum ? kayit.egitimdurum : -1;
   var seviye = kayit.seviye ? kayit.seviye : -1;
@@ -155,7 +156,7 @@ else var bilgisayar = [new RegExp("")];
   console.log(JSON.stringify(id)+'id');
   console.log(dil+'dil');
   console.log(egitimdurum+'egitimdurum');
-  console.log(bilgisayar[0]+'bilgisayar');
+  // console.log(bilgisayar[0]+'bilgisayar');
   console.log(JSON.stringify(segment)+'segment');
 
 
@@ -206,9 +207,11 @@ else var bilgisayar = [new RegExp("")];
         $and : [ {_id: { $in : ozgecmisler}}, segment, {sehir: sehir}, {unvan: unvan}, {isim: isim},
                   {yabanciDil: { $elemMatch: { dil: dil, seviye: { $gte: seviye }}}},
                   { yilTecrube: { $gte: yilTecrube }}, { dogumTarihi: { $gte: dogumTarihi }}, {enabled: true},
-                   { egitimdurum: { $gte: egitimdurum }}, {bilgisayar: { $all: bilgisayar}},
+                   { egitimdurum: { $gte: egitimdurum }},
+                   // {bilgisayar: { $all: bilgisayar}},
                   // { egitimdurum: { $gte: egitimdurum }},
-              { $or: [{isim: st}, {unvan: st}, {sehir: st}, {bilgisayar: { $all: st}},
+              { $or: [{isim: st}, {unvan: st}, {sehir: st},
+                // {bilgisayar: { $all: st}},
                   {egitim: {$elemMatch: {okul:st}}}, {egitim: {$elemMatch: {ulke:st}}}, {egitim: {$elemMatch: {bolum:st}}},
                   {tecrube: {$elemMatch: {pozisyon:st}}}, {tecrube: {$elemMatch: {firma:st}}},
                   {tecrube: {$elemMatch: {isTanimiKisa:st}}}, {tecrube: {$elemMatch: {ulke:st}}},

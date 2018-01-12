@@ -175,10 +175,12 @@ var OzgecmisSchema = new mongoose.Schema({
         //required: true
     },
 
-    bilgisayar: {
-        type: [String]
-        //required: true
-    },
+    tags: [{
+        tag: {
+        type: String
+          },
+        yil: {type: Number}}
+  ],
 
     enabled: {
         type: Boolean
